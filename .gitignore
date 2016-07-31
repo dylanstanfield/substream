@@ -1,3 +1,9 @@
+node_modules
+.idea/**
+!.idea/runConfigurations
+**/*.log
+logs
+
 # Logs
 logs
 *.log
