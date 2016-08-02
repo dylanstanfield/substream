@@ -23,8 +23,17 @@ router.get('/auth/google/callback', function(req, res, next) {
 router.get('/subs', function(req, res, next) {
     yts.getCurrentUserInfo().then((user) => {
         yts.getSubscriptionList().then((subs) => {
-            res.render('subs', { subs: subs, user: user })
+            yts.getConfig().then((config) => {
+                console.log(config);
+                res.render('subs', { subs: subs, user: user })
+            }).catch((err) => {
+                console.log(err);
+            });
+        }).catch((err) => {
+            console.log(err);
         });
+    }).catch((err) => {
+        console.log(err);
     });
 });
 
