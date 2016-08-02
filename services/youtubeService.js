@@ -7,10 +7,12 @@ var oauth2Client = new OAuth2(
     auth.googleAuth.clientSecret,
     auth.googleAuth.callbackURL);
 
-var scopes = [ 'https://www.googleapis.com/auth/youtube', 'https://www.googleapis.com/auth/drive.appdata', 'https://www.googleapis.com/auth/drive.file' ];
+var scopes = [ 'https://www.googleapis.com/auth/youtube', 'https://www.googleapis.com/auth/drive.appdata' ];
 
 var YouTube = google.youtube({ version: 'v3', auth: oauth2Client });
 var Drive = google.drive({ version: 'v3', auth: oauth2Client });
+
+var configFileId = null;
 
 class YouTubeService {
     constructor() {
@@ -64,6 +66,48 @@ class YouTubeService {
         });
     }
 
+    getConfig() {
+        return new Promise((resolve, reject) => {
+            this.getAppDataFiles().then((files) => {
+
+                files.forEach(function(file) {
+                    if(file.name == "config.json") configFileId = file.id;
+                });
+
+                if(configFileId) {
+                    this.getFile(configFileId).then((file) => {
+                        resolve(file);
+                    });
+                } else {
+                    this.createConfigFile().then((fileId) => {
+                        this.getFile(fileId).then((file) => {
+                            resolve(file);
+                        });
+                    });
+                }
+            });
+        });
+    }
+
+    updatedConfig(config) {
+        return new Promise((resolve, reject) => {
+            Drive.files.update(
+                {
+                    fileId: configFileId,
+                    uploadType: 'media',
+                    media: {
+                        mimeType: 'application/json',
+                        body: JSON.stringify(config)
+                    }
+                },
+                function(err, response) {
+                    if(err) reject(reject);
+                    else resolve(response.id)
+                }
+            );
+        });
+    }
+
     getAppDataFiles() {
         return new Promise((resolve, reject) => {
             Drive.files.list(
@@ -81,32 +125,6 @@ class YouTubeService {
 
     }
 
-    getConfig() {
-        return new Promise((resolve, reject) => {
-            this.getAppDataFiles().then((files) => {
-
-                let configId = null;
-
-                files.forEach(function(file) {
-                    console.log(file);
-                    if(file.name == "config.json") configId = file.id;
-                });
-
-                if(configId) {
-                    this.getFile(configId).then((file) => {
-                        resolve(file);
-                    });
-                } else {
-                    this.createConfigFile().then((fileId) => {
-                        this.getFile(fileId).then((file) => {
-                            resolve(file);
-                        });
-                    });
-                }
-            });
-        });
-    }
-
     createConfigFile() {
 
         var fileMetadata = {
@@ -114,11 +132,12 @@ class YouTubeService {
             'parents': [ 'appDataFolder']
         };
 
+        var config = {};
+        config.test = 'this is a test';
+
         var media = {
             mimeType: 'application/json',
-            body: JSON.stringify({
-                test: 'this is a test'
-            })
+            body: JSON.stringify(config)
         };
 
         return new Promise((resolve, reject) => {
@@ -145,7 +164,7 @@ class YouTubeService {
                 },
                 function(err, response) {
                     if(err) reject(reject);
-                    else resolve(response)
+                    else resolve(response);
                 }
             );
         });
