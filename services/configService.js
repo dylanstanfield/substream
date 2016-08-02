@@ -16,23 +16,22 @@ class ConfigService {
                     if(file.name == "config.json") configFileId = file.id;
                 });
 
-                if(configFileId) {
-                    this.getFile(configFileId, auth).then((file) => {
-                        resolve({
-                            id: configFileId,
-                            data: file
-                        });
-                    });
+                return configFileId;
+
+            }).then((fileId) => {
+                if(fileId) {
+                    return this.getFile(fileId, auth);
                 } else {
-                    this.createConfigFile(auth).then((fileId) => {
-                        this.getFile(fileId, auth).then((file) => {
-                            resolve({
-                                id: fileId,
-                                data: file
-                            });
-                        });
+                    this.createConfigFile(auth).then((newFileId) => {
+                        return this.getFile(newFileId, auth);
+                    }).catch((err) => {
+                        reject(err);
                     });
                 }
+            }).then((file) => {
+                resolve(file);
+            }).catch((err) => {
+                reject(err);
             });
         });
     }
@@ -116,7 +115,10 @@ class ConfigService {
                 },
                 function(err, response) {
                     if(err) reject(reject);
-                    else resolve(response);
+                    else resolve({
+                        id: fileId,
+                        data: response
+                    });
                 }
             );
         });

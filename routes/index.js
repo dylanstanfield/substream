@@ -46,27 +46,27 @@ router.get('/auth/google/callback', function(req, res, next) {
 });
 
 router.get('/subs', function(req, res, next) {
+
+    let $user = null;
+    let $subs = null;
+
     youtube.getCurrentUserInfo(oauthTest).then((user) => {
-        youtube.getSubscriptionList(oauthTest).then((subs) => {
-            configService.getConfig(oauthTest).then((config) => {
-                console.log(config);
-                config.data.updated = 'this has been updated';
-                configService.updatedConfig(config.data, config.id, oauthTest).then((fileId) => {
-                    console.log(fileId);
-                    configService.getFile(fileId, oauthTest).then((file) => {
-                        console.log(file);
-                        res.render('subs', { subs: subs, user: user })
-                    });
-                });
-            }).catch((err) => {
-                console.log(err);
-            });
-        }).catch((err) => {
-            console.log(err);
-        });
+        $user = user;
+        return youtube.getSubscriptionList(oauthTest);
+    }).then((subs) => {
+        $subs = subs;
+        return configService.getConfig(oauthTest);
+    }).then((config) => {
+        config.data.updated = 'this has been updated';
+        return configService.updatedConfig(config.data, config.id, oauthTest);
+    }).then((fileId) => {
+        return configService.getFile(fileId, oauthTest);
+    }).then((config) => {
+        res.render('subs', { subs: $subs, user: $user, config: config })
     }).catch((err) => {
         console.log(err);
     });
+
 });
 
 module.exports = router;

@@ -2,6 +2,7 @@ extends layout
 
 block content
     h1= user.title + '\'s Subscriptions'
+    p= JSON.stringify(config)
     each sub in subs
         h6= sub.snippet.title
         p= sub.snippet.description
