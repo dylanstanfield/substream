@@ -8,8 +8,8 @@ var googleConfig = require('./../config/google');
 
 // services
 var OAuth2Service = require('./../services/oauth2');
-var YouTube = require('./../services/youtubeService');
-var Drive = require('./../services/driveService');
+var YouTube = require('./../services/youtube');
+var Drive = require('./../services/drive');
 
 // logger
 var logger = comb.logger('ss.controllers.login');
