@@ -4,6 +4,7 @@ node_modules
 **/*.log
 logs
 config/auth.js
+sessions.db
 
 # Logs
 logs

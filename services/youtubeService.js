@@ -1,13 +1,5 @@
 var google = require('googleapis');
 
-// var oauth2Client = new OAuth2(
-//     auth.googleAuth.clientID,
-//     auth.googleAuth.clientSecret,
-//     auth.googleAuth.callbackURL);
-
-// var scopes = [ 'https://www.googleapis.com/auth/youtube', 'https://www.googleapis.com/auth/drive.appdata' ];
-
-
 class YouTubeService {
     constructor() {
         this.youtube = google.youtube('v3');

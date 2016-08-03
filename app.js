@@ -1,4 +1,6 @@
 var express = require('express');
+var session = require('express-session');
+var SQLiteStore = require('connect-sqlite3')(session);
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -8,7 +10,7 @@ var bodyParser = require('body-parser');
 var app = express();
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
+var auth = require('./routes/auth');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -22,8 +24,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(session({
+  store: new SQLiteStore,
+  secret: 'your secret',
+  resave: true,
+  saveUninitialized: true,
+  cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 } // 1 week
+}));
+
 app.use('/', routes);
-app.use('/users', users);
+app.use('/auth', auth);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
