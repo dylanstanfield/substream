@@ -1,13 +1,11 @@
 var google = require('googleapis');
+var YouTube = google.youtube('v3');
 
 class YouTubeService {
-    constructor() {
-        this.youtube = google.youtube('v3');
-    }
 
-    getSubscriptionList(auth) {
+    static getSubscriptionList(auth) {
         return new Promise((resolve, reject) => {
-            this.youtube.subscriptions.list(
+            YouTube.subscriptions.list(
                 {
                     part: 'snippet',
                     mine: true,
@@ -22,9 +20,9 @@ class YouTubeService {
         });
     }
 
-    getCurrentUserInfo(auth) {
+    static getCurrentUserInfo(auth) {
         return new Promise((resolve, reject) => {
-            this.youtube.channels.list(
+            YouTube.channels.list(
                 {
                     part: 'snippet',
                     mine: true,

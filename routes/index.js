@@ -1,12 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
-var YouTubeService = require('./../services/youtubeService');
-var youtube = new YouTubeService();
-
-var ConfigService = require('./../services/configService');
-var configService = new ConfigService();
-
+var YouTube = require('./../services/youtubeService');
+var Drive = require('./../services/driveService');
 var OAuth2Service = require('./../services/oauth2Service');
 
 /* GET home page. */
@@ -16,26 +12,18 @@ router.get('/', function(req, res, next) {
 
 router.get('/subs', function(req, res, next) {
 
-    let $user = null;
-    let $subs = null;
-    let $auth = null;
+    var $auth = null;
 
     OAuth2Service.getAuthClientForCreds(req.session.auth).then((auth) => {
         $auth = auth;
-        return youtube.getCurrentUserInfo($auth);
-    }).then((user) => {
-        $user = user;
-        return youtube.getSubscriptionList($auth);
+        return YouTube.getSubscriptionList($auth);
     }).then((subs) => {
-        $subs = subs;
-        return configService.getConfig($auth);
-    }).then((config) => {
-        config.data.updated = 'this has been updated';
-        return configService.updatedConfig(config.data, config.id, $auth);
-    }).then((fileId) => {
-        return configService.getFile(fileId, $auth);
-    }).then((config) => {
-        res.render('subs', { subs: $subs, user: $user, config: config })
+        console.log(subs[0].snippet);
+        res.render('subs', {
+            user: req.session.user,
+            config: req.session.config,
+            subs: subs
+        });
     }).catch((err) => {
         console.log(err);
     });

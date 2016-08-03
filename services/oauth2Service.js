@@ -28,6 +28,7 @@ class OAuth2Service {
             resolve(client);
         });
     }
+
 }
 
 module.exports = OAuth2Service;

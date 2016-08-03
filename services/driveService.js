@@ -1,12 +1,9 @@
 var google = require('googleapis');
+var Drive = google.drive('v3');
 
-class ConfigService {
+class DriveService {
 
-    constructor() {
-        this.drive = google.drive('v3');
-    }
-
-    getConfig(auth) {
+    static getConfig(auth) {
         return new Promise((resolve, reject) => {
             this.getAppDataFiles(auth).then((files) => {
 
@@ -36,9 +33,9 @@ class ConfigService {
         });
     }
 
-    updatedConfig(config, configFileId, auth) {
+    static updatedConfig(config, configFileId, auth) {
         return new Promise((resolve, reject) => {
-            this.drive.files.update(
+            Drive.files.update(
                 {
                     fileId: configFileId,
                     uploadType: 'media',
@@ -56,9 +53,9 @@ class ConfigService {
         });
     }
 
-    getAppDataFiles(auth) {
+    static getAppDataFiles(auth) {
         return new Promise((resolve, reject) => {
-            this.drive.files.list(
+            Drive.files.list(
                 {
                     spaces: 'appDataFolder',
                     fields: 'nextPageToken, files(id, name)',
@@ -74,7 +71,7 @@ class ConfigService {
 
     }
 
-    createConfigFile(auth) {
+    static createConfigFile(auth) {
 
         var fileMetadata = {
             'name': 'config.json',
@@ -90,7 +87,7 @@ class ConfigService {
         };
 
         return new Promise((resolve, reject) => {
-            this.drive.files.create(
+            Drive.files.create(
                 {
                     resource: fileMetadata,
                     media: media,
@@ -105,9 +102,9 @@ class ConfigService {
         });
     }
 
-    getFile(fileId, auth) {
+    static getFile(fileId, auth) {
         return new Promise((resolve, reject) => {
-            this.drive.files.get(
+            Drive.files.get(
                 {
                     fileId: fileId,
                     alt: 'media',
@@ -125,4 +122,4 @@ class ConfigService {
     }
 }
 
-module.exports = ConfigService;
+module.exports = DriveService;
