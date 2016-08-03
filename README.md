@@ -4,7 +4,7 @@ Trying to create a better way to manage your youtube subscriptions.
 ## Configuration
 To get this thing running you'll need to create a [Google APIs project](https://console.developers.google.com/apis/dashboard).
 
-Create credentials for a Web application.
+After you've got a project, create credentials for a Web application.
 
 Set one of your Authorized JavaScript origins to `http://localhost:3000` and one of your Authorized redirect URIs to `http://localhost:3000/auth/google/callback`.
 
