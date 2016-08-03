@@ -33,7 +33,7 @@ class DriveService {
         });
     }
 
-    static updatedFile(fileId, data, auth) {
+    static updateFile(fileId, data, auth) {
         return new Promise((resolve, reject) => {
             Drive.files.update(
                 {
