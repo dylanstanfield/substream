@@ -3,7 +3,7 @@ node_modules
 !.idea/runConfigurations
 **/*.log
 logs
-config/auth.js
+config/google.js
 sessions.db
 
 # Logs
