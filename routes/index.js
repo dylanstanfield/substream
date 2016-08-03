@@ -4,32 +4,26 @@ var router = express.Router();
 var comb = require('comb');
 var logger = comb.logger('ss.routes.index');
 
-var YouTube = require('./../services/youtubeService');
-var Drive = require('./../services/driveService');
-var OAuth2Service = require('./../services/oauth2Service');
+var StreamsController = require('./../controllers/streams');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    logger.debug('request for /');
-    res.render('index', { title: 'substream' });
-});
 
-router.get('/subs', function(req, res, next) {
+    if(req.session.user) {
 
-    var $auth = null;
-
-    OAuth2Service.getAuth(req.session.creds).then((auth) => {
-        $auth = auth;
-        return YouTube.getSubscriptions($auth);
-    }).then((subs) => {
-        res.render('subs', {
-            user: req.session.user,
-            config: req.session.config,
-            subs: subs
+        StreamsController.getAllStreams(req.session.user.creds).then(subs => {
+            res.render('streams', {
+                user: req.session.user.info,
+                config: req.session.user.config,
+                subs: subs
+            });
+        }).catch(err => {
+            logger.error(err);
         });
-    }).catch((err) => {
-        console.log(err);
-    });
+
+    } else {
+        res.render('index', { title: 'substream' });
+    }
 
 });
 

@@ -1,5 +1,10 @@
 {
-  "name": "youtube-sub-man",
+  "name": "substream",
+  "author": {
+    "name": "Dylan Stanfield",
+    "email": "dylanstanfield@live.com",
+    "url": "http://dstanfield.com/"
+  },
   "version": "0.0.0",
   "private": true,
   "scripts": {

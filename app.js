@@ -15,7 +15,8 @@ log.level = 'ALL';
 var app = express();
 
 var routes = require('./routes/index');
-var auth = require('./routes/auth');
+var login = require('./routes/login');
+var streams = require('./routes/streams');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -38,7 +39,8 @@ app.use(session({
 }));
 
 app.use('/', routes);
-app.use('/auth', auth);
+app.use('/login', login);
+app.use('/streams', streams);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
