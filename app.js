@@ -7,6 +7,11 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var comb = require('comb');
+comb.logger.configure();
+var log = comb.logger('ss');
+log.level = 'ALL';
+
 var app = express();
 
 var routes = require('./routes/index');
