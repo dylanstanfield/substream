@@ -3,7 +3,7 @@ var YouTube = google.youtube('v3');
 
 class YouTubeService {
 
-    static getSubscriptionList(auth) {
+    static getSubscriptions(auth) {
         return new Promise((resolve, reject) => {
             YouTube.subscriptions.list(
                 {
@@ -20,7 +20,7 @@ class YouTubeService {
         });
     }
 
-    static getCurrentUserInfo(auth) {
+    static getUserInfo(auth) {
         return new Promise((resolve, reject) => {
             YouTube.channels.list(
                 {

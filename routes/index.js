@@ -18,9 +18,9 @@ router.get('/subs', function(req, res, next) {
 
     var $auth = null;
 
-    OAuth2Service.getAuthClientForCreds(req.session.auth).then((auth) => {
+    OAuth2Service.getAuth(req.session.creds).then((auth) => {
         $auth = auth;
-        return YouTube.getSubscriptionList($auth);
+        return YouTube.getSubscriptions($auth);
     }).then((subs) => {
         res.render('subs', {
             user: req.session.user,

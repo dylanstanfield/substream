@@ -12,12 +12,7 @@ var authConfig = require('./../config/auth');
 var YouTube = require('./../services/youtubeService');
 var Drive = require('./../services/driveService');
 
-var googleAuthUrl = OAuth2Service.generateGoogleAuthUrl(
-    authConfig.googleAuth.clientID,
-    authConfig.googleAuth.clientSecret,
-    authConfig.googleAuth.callbackURL,
-    authConfig.googleAuth.scopes
-);
+var googleAuthUrl = OAuth2Service.generateGoogleAuthUrl();
 
 router.get('/google', function(req, res, next) {
     logger.debug('Sending user to authenticate with Google');
@@ -35,8 +30,8 @@ router.get('/google/callback', function(req, res, next) {
 
     OAuth2Service.setTokensForCode(req.query.code, auth).then(() => {
         logger.debug(`Set tokens for the user's code`);
-        req.session.auth = auth;
-        return YouTube.getCurrentUserInfo(auth);
+        req.session.creds = auth.credentials;
+        return YouTube.getUserInfo(auth);
     }).then((user) => {
         logger.debug(`User is ${user.title}`);
         req.session.user = user;

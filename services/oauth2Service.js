@@ -1,13 +1,18 @@
 var google = require('googleapis');
 var OAuth2 = google.auth.OAuth2;
+var authConfig = require('./../config/auth');
 
 class OAuth2Service {
 
-    static generateGoogleAuthUrl(clientId, clientSecret, redirectUrl, scopes) {
-        let client = new OAuth2(clientId, clientSecret, redirectUrl);
+    static generateGoogleAuthUrl() {
+        let client = new OAuth2(
+            authConfig.googleAuth.clientID,
+            authConfig.googleAuth.clientSecret,
+            authConfig.googleAuth.callbackURL);
+
         return client.generateAuthUrl({
             access_type: 'offline', // 'online' (default) or 'offline' (gets refresh_token)
-            scope: scopes
+            scope: authConfig.googleAuth.scopes
         });
     }
 
@@ -21,10 +26,15 @@ class OAuth2Service {
         });
     }
 
-    static getAuthClientForCreds(auth) {
+    static getAuth(creds) {
         return new Promise((resolve, reject) => {
-            let client = new OAuth2(auth.clientId_, auth.clientSecret_, auth.redirectUrl_);
-            client.credentials = auth.credentials;
+            let client = new OAuth2(
+                authConfig.googleAuth.clientID,
+                authConfig.googleAuth.clientSecret,
+                authConfig.googleAuth.callbackURL);
+
+            client.credentials = creds;
+
             resolve(client);
         });
     }

@@ -33,15 +33,15 @@ class DriveService {
         });
     }
 
-    static updatedConfig(config, configFileId, auth) {
+    static updatedFile(fileId, data, auth) {
         return new Promise((resolve, reject) => {
             Drive.files.update(
                 {
-                    fileId: configFileId,
+                    fileId: fileId,
                     uploadType: 'media',
                     media: {
                         mimeType: 'application/json',
-                        body: JSON.stringify(config)
+                        body: JSON.stringify(data)
                     },
                     auth: auth
                 },
