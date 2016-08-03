@@ -22,7 +22,7 @@ class ConfigService {
                 if(fileId) {
                     return this.getFile(fileId, auth);
                 } else {
-                    this.createConfigFile(auth).then((newFileId) => {
+                    return this.createConfigFile(auth).then((newFileId) => {
                         return this.getFile(newFileId, auth);
                     }).catch((err) => {
                         reject(err);
