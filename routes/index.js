@@ -1,40 +1,44 @@
-var express = require('express');
-var router = express.Router();
+let express = require('express');
+let router = express.Router();
 
-var comb = require('comb');
-var logger = comb.logger('ss.routes.index');
+let comb = require('comb');
+let logger = comb.logger('ss.routes.index');
 
-var StreamsController = require('./../controllers/streams');
+let StreamsController = require('./../controllers/streams');
 
-var folderHelper = require('./../helpers/folderHelper');
+let folderHelper = require('./../helpers/folders');
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
+let mw = require('./middleware');
 
-    if(req.session.user) {
-        var $subs = [];
+router.get('/', mw.sessionProtected, function(req, res, next) {
 
-        StreamsController.getAllStreams(req.session.user.creds).then(subs => {
-            $subs = subs;
-            
-            // TODO: take in folder rules instead of empty array (which is currently overridden inside function)
-            return folderHelper.organizeSubsIntoFolders(subs, []);
+    // TODO: add this back in when we want to do caching.
+    // if (req.session.subs && req.session.folders) {
+    //     res.render('streams', {
+    //         user: req.session.user.info,
+    //         config: req.session.user.config,
+    //         subs: req.session.subs,
+    //         folders: req.session.folders
+    //     });
+    // } else {
+    // }
 
-        }).then((folders) => {
-            res.render('streams', {
-                user: req.session.user.info,
-                config: req.session.user.config,
-                subs: $subs,
-                folders: folders
-            });
-        }).catch(err => {
-            logger.error(err);
+    let $subs = [];
+    StreamsController.getAllStreams(req.session.user.creds).then(subs => {
+        $subs = subs;
+
+        // TODO: take in folder rules instead of empty array (which is currently overridden inside function)
+        return folderHelper.organizeSubsIntoFolders(subs, []);
+    }).then((folders) => {
+        res.render('streams', {
+            user: req.session.user.info,
+            config: req.session.user.config,
+            subs: $subs,
+            folders: folders
         });
-
-    } else {
-        res.render('index', { title: 'substream' });
-    }
-
+    }).catch(err => {
+        logger.error(err);
+    });
 });
 
 module.exports = router;

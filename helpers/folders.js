@@ -1,32 +1,8 @@
 let testFolders = [
     {
-        name: 'Webapps',
+        name: 'Stuff',
         subIds: [
-            'FMJAXATLe-0Y6TMmLcw7F0OIW6kWo7KvZcZxJPJ8ccE',
-            'FMJAXATLe-0Y6TMmLcw7FzoinykcZHFuVToSGLn_lpY',
-            'FMJAXATLe-0Y6TMmLcw7F9rxLGsvk_9lbU92AyYHR9I',
-            'FMJAXATLe-0Y6TMmLcw7F2LM6eGgLFwRBaNNU0jaZm4'
-        ],
-        subs: []
-    },
-    {
-        name: 'Javascript',
-        subIds: [
-            'FMJAXATLe-0Y6TMmLcw7F3RmgzBYa7ob1KLCBWWcDog'
-        ],
-        subs: []
-    },
-    {
-        name: 'PHP JS',
-        subIds: [
-            'FMJAXATLe-0Y6TMmLcw7F32YV9eAiGyyaZcFt_PbzQE'
-        ],
-        subs: []
-    },
-    {
-        name: 'Nerd',
-        subIds: [
-            'FMJAXATLe-0Y6TMmLcw7FyBZ_3ufaJbba2RG0zHa4g0'
+            'FMJAXATLe-0Y6TMmLcw7F7dPZtrDJG_uuTd9ZZR9RPU'
         ],
         subs: []
     }

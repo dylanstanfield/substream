@@ -1,0 +1,1 @@
+module.exports.sessionProtected = require('./sessionProtected');
