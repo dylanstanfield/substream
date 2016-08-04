@@ -10,7 +10,8 @@ block content
     each folder in folders
         li= folder.name + " - " + folder.subs.length + " subs"
     h2 Subscriptions
-    each sub in subs
-        img(src=sub.snippet.thumbnails.default.url)
-        h6= sub.snippet.title
-        p= sub.snippet.description
+    div.subs-wrap
+        each sub in subs
+            div.sub
+                img(src=sub.snippet.thumbnails.default.url)
+                label= sub.snippet.title

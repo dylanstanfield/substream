@@ -1,8 +1,35 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+body, html {
+    margin: 0;
+    background: #272727;
+    color: #FFFFFF;
+    font-family: 'Open Sans', sans-serif;
 }
 
-a {
-  color: #00B7FF;
+* {
+    box-sizing: border-box;
+}
+
+p {
+    line-height: 1.67;
+}
+
+.subs-wrap {
+    padding: 48px;
+}
+
+.sub {
+    padding: 6px;
+}
+
+.sub img {
+    border-radius: 50%;
+    height: 40px;
+    display: inline-block;
+}
+
+.sub label {
+    display: inline-block;
+    line-height: 40px;
+    padding: 0 16px;
+    vertical-align: top;
 }
