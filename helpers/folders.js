@@ -10,7 +10,7 @@ let testFolders = [
 
 let organizeSubsIntoFolders = (subs, folders) => {
     // TODO: take this part out, allowing to pass in folders
-    folders = testFolders;
+    // folders = testFolders;
 
     return Promise.resolve().then(() => {
 

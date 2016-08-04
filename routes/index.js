@@ -28,7 +28,7 @@ router.get('/', mw.sessionProtected, function(req, res, next) {
         $subs = subs;
 
         // TODO: take in folder rules instead of empty array (which is currently overridden inside function)
-        return folderHelper.organizeSubsIntoFolders(subs, []);
+        return folderHelper.organizeSubsIntoFolders(subs, req.session.user.config.data.folders);
     }).then((folders) => {
         res.render('streams', {
             user: req.session.user.info,
@@ -40,7 +40,5 @@ router.get('/', mw.sessionProtected, function(req, res, next) {
         logger.error(err);
     });
 });
-
-// TODO: Single folder
 
 module.exports = router;

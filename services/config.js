@@ -45,9 +45,10 @@ class ConfigService {
             'parents': [ 'appDataFolder']
         };
 
-        var config = {};
-        config.test = 'this is a test';
-        config.version = 1;
+        var config = {
+            version: 1,
+            folders: []
+        };
 
         var media = {
             mimeType: 'application/json',
