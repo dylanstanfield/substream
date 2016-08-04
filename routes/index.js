@@ -41,4 +41,6 @@ router.get('/', mw.sessionProtected, function(req, res, next) {
     });
 });
 
+// TODO: Single folder
+
 module.exports = router;
