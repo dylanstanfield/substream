@@ -7,8 +7,8 @@ block content
     p= JSON.stringify(config)
     h2 Folders
     ul
-    each folder in folders
-        li= folder.name + " - " + folder.subs.length + " subs"
+    each stream in streams
+        li= stream.name + " - " + stream.subs.length + " subs"
     h2 Subscriptions
     div.subs-wrap
         each sub in subs

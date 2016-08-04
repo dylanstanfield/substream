@@ -4,6 +4,9 @@ var comb = require('comb');
 // services
 var Drive = require('./drive');
 
+// models
+var ConfigData = require('./../models/configData');
+
 // logger
 var logger = comb.logger('ss.services.config');
 
@@ -45,14 +48,12 @@ class ConfigService {
             'parents': [ 'appDataFolder']
         };
 
-        var config = {
-            version: 1,
-            folders: []
-        };
+        var configData = new ConfigData();
+        configData.lastSaved = new Date();
 
         var media = {
             mimeType: 'application/json',
-            body: JSON.stringify(config)
+            body: JSON.stringify(configData)
         };
 
         return Drive.createFile(metadata, media, auth);
