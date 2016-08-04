@@ -8,8 +8,8 @@ var googleConfig = require('./../config/google');
 
 // services
 var OAuth2Service = require('./../services/oauth2');
-var YouTube = require('./../services/youtubeService');
-var Drive = require('./../services/driveService');
+var YouTube = require('./../services/youtube');
+var Config = require('./../services/config');
 
 // logger
 var logger = comb.logger('ss.controllers.login');
@@ -40,7 +40,7 @@ class LoginController {
             OAuth2Service.setTokensForCode(accessCode, auth).then(() => {
                 logger.debug(`Set tokens for the user's code`);
                 user.creds = auth.credentials;
-                return Promise.all([YouTube.getUserInfo(auth), Drive.getConfig(auth)]);
+                return Promise.all([YouTube.getUserInfo(auth), Config.getConfig(auth)]);
             }).then(results => {
                 user.info = results[0];
                 user.config = results[1];

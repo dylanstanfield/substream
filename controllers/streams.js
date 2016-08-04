@@ -1,8 +1,7 @@
 var comb = require('comb');
 var logger = comb.logger('ss.controllers.streams');
 
-var YouTube = require('./../services/youtubeService');
-
+var YouTube = require('./../services/youtube');
 var OAuth2Helper = require('./../helpers/oauth2');
 
 class StreamsController {
