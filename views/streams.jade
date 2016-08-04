@@ -5,6 +5,11 @@ block content
         history.pushState("", document.title, window.location.pathname);
     h1= user.title + '\'s Subscriptions'
     p= JSON.stringify(config)
+    h2 Folders
+    ul
+    each folder in folders
+        li= folder.name + " - " + folder.subs.length + " subs"
+    h2 Subscriptions
     each sub in subs
         img(src=sub.snippet.thumbnails.default.url)
         h6= sub.snippet.title
