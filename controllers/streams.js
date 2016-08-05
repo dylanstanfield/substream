@@ -116,6 +116,30 @@ class StreamsController {
             })
         });
     }
+
+    static getVideos(user, folderId) {
+        return new Promise((resolve, reject) => {
+
+            let $auth = null;
+
+            OAuth2Helper.getAuth(user.creds).then(auth => {
+                $auth = auth;
+                return FoldersHelper.getFolderById(user.config.data, folderId);
+            }).then(folder => {
+                let videoCalls = [];
+
+                for(let subId of folder.subIds) {
+                    videoCalls.push(YouTube.getVideos($auth, subId));
+                }
+
+                return Promise.all(videoCalls);
+            }).then(results => {
+                resolve(results);
+            }).catch(err => {
+                reject(err);
+            })
+        });
+    }
 }
 
 module.exports = StreamsController;

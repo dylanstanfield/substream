@@ -18,6 +18,7 @@ block content
             button(onclick="testDeleteStream('" + stream.folderId + "')") Delete
             button(onclick="testGetStream('" + stream.folderId + "')") Get Json
             button(onclick="testUpdateStream('" + stream.folderId + "', " + "subs" + index + ")") Remove first
+            button(onclick="getVideos('" + stream.folderId + "')") Get Videos
     h2 Subscriptions
     div.subs-wrap
         each sub in subs
@@ -86,10 +87,7 @@ block content
 
         function testUpdateStream(id, subs) {
 
-            console.log(subs);
             subs.splice(0, 1);
-
-            console.log(subs);
 
             $.ajax({
                 type: "PATCH",
@@ -101,5 +99,17 @@ block content
                 success: function (res) {
 
                 }
+            });
+        }
+
+        function getVideos(id) {
+            $.ajax({
+                type: "GET",
+                traditional: true,
+                url: '/api/streams/' + id + '/videos',
+                success: function (res) {
+                    console.log(res);
+                },
+                dataType: 'json'
             });
         }

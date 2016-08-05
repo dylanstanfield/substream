@@ -36,6 +36,25 @@ class YouTubeService {
             );
         });
     }
+
+    static getVideos(auth, channelId) {
+        return new Promise((resolve, reject) => {
+            YouTube.search.list(
+                {
+                    part: 'snippet',
+                    type: 'video',
+                    channelId: channelId,
+                    maxResults: 50,
+                    order: 'date',
+                    auth: auth
+                },
+                function(err, response) {
+                    if(err) reject(err);
+                    else resolve(response.items);
+                }
+            );
+        });
+    }
 }
 
 module.exports = YouTubeService;

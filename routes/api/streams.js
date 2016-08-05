@@ -4,12 +4,14 @@ let router = express.Router();
 let comb = require('comb');
 let logger = comb.logger('ss.routes.api');
 
-let mw = require('./middleware');
+let mw = require('./../middleware/index');
 
-let StreamsController = require('./../controllers/streams');
+let StreamsController = require('./../../controllers/streams');
+
+router.use('/', mw.apiSessionProtected);
 
 // create new stream
-router.post('/streams', mw.apiSessionProtected, function(req, res, next) {
+router.post('/', function(req, res, next) {
     StreamsController.createStream(req.session.user, req.body.name, req.body.subIds).then(streamId => {
         res.json(streamId);
     }).catch(err => {
@@ -18,16 +20,16 @@ router.post('/streams', mw.apiSessionProtected, function(req, res, next) {
 });
 
 // delete stream
-router.delete('/streams', mw.apiSessionProtected, function(req, res, next) {
+router.delete('/', function(req, res, next) {
     StreamsController.deleteStream(req.session.user, req.body.folderId).then(() => {
-        res.sendStatus(202);
+        res.sendStatus(200); // Success
     }).catch(err => {
         logger.error(err);
     });
 });
 
 // get all streams
-router.get('/streams', mw.apiSessionProtected, function(req, res, next) {
+router.get('/', function(req, res, next) {
     StreamsController.getAllSubs(req.session.user).then(subs => {
         return StreamsController.getAllStreams(req.session.user, subs);
     }).then(streams => {
@@ -38,7 +40,7 @@ router.get('/streams', mw.apiSessionProtected, function(req, res, next) {
 });
 
 // get single stream
-router.get('/streams/:id', mw.apiSessionProtected, function(req, res, next) {
+router.get('/:id', function(req, res, next) {
     StreamsController.getAllSubs(req.session.user).then(subs => {
         return StreamsController.getStream(req.session.user, subs, req.params.id);
     }).then(stream => {
@@ -49,12 +51,21 @@ router.get('/streams/:id', mw.apiSessionProtected, function(req, res, next) {
 });
 
 // modify a stream
-router.patch('/streams/:id', mw.apiSessionProtected, function(req, res, next) {
+router.patch('/:id', function(req, res, next) {
     StreamsController.updateStream(req.session.user, req.params.id, JSON.parse(req.body.subs)).then(() => {
-        res.sendStatus(204);
+        res.sendStatus(200); // Success
     }).catch(err => {
         logger.error(err);
     });
+});
+
+// get videos for a stream
+router.get('/:id/videos', function(req, res, next) {
+    StreamsController.getVideos(req.session.user, req.params.id).then(results => {
+        res.json(results);
+    }).catch(err => {
+        logger.error(err);
+    })
 });
 
 module.exports = router;

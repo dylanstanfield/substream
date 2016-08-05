@@ -12,7 +12,7 @@ log.level = 'ALL';
 
 var app = express();
 
-var api = require('./routes/api');
+var api = require('./routes/api/api');
 var routes = require('./routes/index');
 var login = require('./routes/login');
 var streams = require('./routes/streams');
@@ -36,7 +36,7 @@ app.use(session({
 app.use('/', routes);
 app.use('/login', login);
 app.use('/streams', streams);
-app.use('/api', api);
+app.use('/api/streams', api.streams);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
