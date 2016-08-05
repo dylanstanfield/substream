@@ -5,7 +5,7 @@ block content
         history.pushState("", document.title, window.location.pathname);
     h1= user.title + '\'s Subscriptions'
     p= JSON.stringify(config)
-    h2 Folders
+    h2 Streams
     ul
 
     button(onclick="testGetAllStreams()") Get all streams json
@@ -14,6 +14,7 @@ block content
     each stream in streams
         li= stream.name + " - " + stream.subs.length + " subs "
             button(onclick="testDeleteStream('" + stream.folderId + "')") Delete
+            button(onclick="testGetStream('" + stream.folderId + "')") Get Json
     h2 Subscriptions
     div.subs-wrap
         each sub in subs
@@ -36,9 +37,9 @@ block content
                 url: '/api/streams',
                 data: folder,
                 success: function (res) {
-
+                    console.log(res);
                 },
-                dataType: 'application/json'
+                dataType: 'json'
             });
         }
 
@@ -52,8 +53,7 @@ block content
                 },
                 success: function (res) {
 
-                },
-                dataType: 'application/json'
+                }
             });
         }
 
@@ -62,6 +62,18 @@ block content
                 type: "Get",
                 traditional: true,
                 url: '/api/streams',
+                success: function (res) {
+                    console.log(res);
+                },
+                dataType: 'json'
+            });
+        }
+
+        function testGetStream(id) {
+            $.ajax({
+                type: "Get",
+                traditional: true,
+                url: '/api/streams/' + id,
                 success: function (res) {
                     console.log(res);
                 },

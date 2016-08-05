@@ -22,15 +22,13 @@ class StreamsController {
         });
     }
 
-    static getAllSubs(user) {
+    static getStream(user, subs, folderId) {
         return new Promise((resolve, reject) => {
-            OAuth2Helper.getAuth(user.creds).then(auth => {
-                return YouTube.getSubscriptions(auth);
-            }).then(subs => {
-                resolve(subs);
-            }).catch(err => {
-                reject(err);
-            })
+            FoldersHelper.buildFolderVM(subs, ConfigData.fromJson(user.config.data), folderId).then(folderVM => {
+                resolve(folderVM);
+            });
+        }).catch((err) => {
+            reject(err);
         });
     }
 
@@ -64,15 +62,13 @@ class StreamsController {
     static deleteStream(user, folderId) {
 
         let configData = ConfigData.fromJson(user.config.data);
-
         let $auth = null;
 
         return new Promise((resolve, reject) => {
             OAuth2Helper.getAuth(user.creds).then(auth => {
                 $auth = auth;
                 return configData.deleteFolderById(folderId);
-            }).then((worked) => {
-                console.log(worked);
+            }).then(() => {
                 return Config.saveConfig(user.config.id, configData, $auth);
             }).then(() => {
                 return Config.getConfig($auth);
@@ -83,6 +79,18 @@ class StreamsController {
                 reject(err);
             });
         })
+    }
+
+    static getAllSubs(user) {
+        return new Promise((resolve, reject) => {
+            OAuth2Helper.getAuth(user.creds).then(auth => {
+                return YouTube.getSubscriptions(auth);
+            }).then(subs => {
+                resolve(subs);
+            }).catch(err => {
+                reject(err);
+            })
+        });
     }
 }
 

@@ -11,7 +11,7 @@ let StreamsController = require('./../controllers/streams');
 // create new stream
 router.post('/streams', mw.apiSessionProtected, function(req, res, next) {
     StreamsController.createStream(req.session.user, req.body.name, req.body.subIds).then(streamId => {
-        res.redirect('/streams/' + streamId);
+        res.json(streamId);
     }).catch(err => {
         logger.error(err);
     });
@@ -20,7 +20,7 @@ router.post('/streams', mw.apiSessionProtected, function(req, res, next) {
 // delete stream
 router.delete('/streams', mw.apiSessionProtected, function(req, res, next) {
     StreamsController.deleteStream(req.session.user, req.body.folderId).then(() => {
-        res.redirect('/');
+        res.sendStatus(202);
     }).catch(err => {
         logger.error(err);
     });
@@ -39,6 +39,11 @@ router.get('/streams', mw.apiSessionProtected, function(req, res, next) {
 
 // get single stream
 router.get('/streams/:id', mw.apiSessionProtected, function(req, res, next) {
+    StreamsController.getAllSubs(req.session.user).then(subs => {
+        return StreamsController.getStream(req.session.user, subs, req.params.id);
+    }).then(stream => {
+        res.json(stream);
+    })
 
 });
 

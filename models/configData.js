@@ -28,7 +28,7 @@ class ConfigData {
                     }
                 }
             }
-            console.log("b" + didDelete);
+
             if(didDelete) resolve(true);
             else reject(new Error(`Unable to delete fold with id ${folderId}`));
         });
