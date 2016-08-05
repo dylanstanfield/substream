@@ -8,7 +8,7 @@ let mw = require('./../middleware/index');
 
 let StreamsController = require('./../../controllers/streams');
 
-router.use('/', mw.apiSessionProtected);
+router.use('/', mw.checkAuthorized);
 
 // create new stream
 router.post('/', function(req, res, next) {

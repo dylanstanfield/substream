@@ -8,18 +8,9 @@ let StreamsController = require('./../controllers/streams');
 
 let mw = require('./middleware');
 
-router.get('/', mw.sessionProtected, function(req, res, next) {
+router.use('/', mw.checkSession);
 
-    // TODO: add this back in when we want to do caching.
-    // if (req.session.subs && req.session.folders) {
-    //     res.render('streams', {
-    //         user: req.session.user.info,
-    //         config: req.session.user.config,
-    //         subs: req.session.subs,
-    //         folders: req.session.folders
-    //     });
-    // } else {
-    // }
+router.get('/', function(req, res, next) {
 
     let $subs = [];
 

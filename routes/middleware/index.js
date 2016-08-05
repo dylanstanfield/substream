@@ -1,2 +1,2 @@
-module.exports.sessionProtected = require('./sessionProtected');
-module.exports.apiSessionProtected = require('./apiSessionProtected');
+module.exports.checkSession = require('./checkSession');
+module.exports.checkAuthorized = require('./checkAuthorized');
