@@ -43,13 +43,18 @@ router.get('/streams/:id', mw.apiSessionProtected, function(req, res, next) {
         return StreamsController.getStream(req.session.user, subs, req.params.id);
     }).then(stream => {
         res.json(stream);
-    })
-
+    }).catch(err => {
+        logger.error(err);
+    });
 });
 
 // modify a stream
 router.patch('/streams/:id', mw.apiSessionProtected, function(req, res, next) {
-
+    StreamsController.updateStream(req.session.user, req.params.id, JSON.parse(req.body.subs)).then(() => {
+        res.sendStatus(204);
+    }).catch(err => {
+        logger.error(err);
+    });
 });
 
 module.exports = router;

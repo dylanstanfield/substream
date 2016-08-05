@@ -7,5 +7,5 @@
  */
 module.exports = (req, res, next) => {
     if (req.session.user) next();
-    else res.json('Error - User\'s session not found')
+    else res.sendStatus(401); // Unauthorized
 };

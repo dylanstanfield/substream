@@ -81,6 +81,30 @@ class StreamsController {
         })
     }
 
+    static updateStream(user, folderId, subs) {
+
+        let configData = ConfigData.fromJson(user.config.data);
+        let $auth = null;
+
+        return new Promise((resolve, reject) => {
+            OAuth2Helper.getAuth(user.creds).then(auth => {
+                $auth = auth;
+                return FoldersHelper.getSubIds(subs);
+            }).then(subIds => {
+                return configData.setSubIdsForId(folderId, subIds);
+            }).then(() => {
+                return Config.saveConfig(user.config.id, configData, $auth);
+            }).then(() => {
+                return Config.getConfig($auth);
+            }).then((config) => {
+                user.config = config;
+                resolve();
+            }).catch(err => {
+                reject(err);
+            });
+        });
+    }
+
     static getAllSubs(user) {
         return new Promise((resolve, reject) => {
             OAuth2Helper.getAuth(user.creds).then(auth => {

@@ -11,10 +11,13 @@ block content
     button(onclick="testGetAllStreams()") Get all streams json
     button(onclick="testCreateStream()") Test create stream
 
-    each stream in streams
+    each stream, index in streams
+        script.
+            var !{"subs" + index} = !{JSON.stringify(stream.subs)};
         li= stream.name + " - " + stream.subs.length + " subs "
             button(onclick="testDeleteStream('" + stream.folderId + "')") Delete
             button(onclick="testGetStream('" + stream.folderId + "')") Get Json
+            button(onclick="testUpdateStream('" + stream.folderId + "', " + "subs" + index + ")") Remove first
     h2 Subscriptions
     div.subs-wrap
         each sub in subs
@@ -71,12 +74,32 @@ block content
 
         function testGetStream(id) {
             $.ajax({
-                type: "Get",
+                type: "GET",
                 traditional: true,
                 url: '/api/streams/' + id,
                 success: function (res) {
                     console.log(res);
                 },
                 dataType: 'json'
+            });
+        }
+
+        function testUpdateStream(id, subs) {
+
+            console.log(subs);
+            subs.splice(0, 1);
+
+            console.log(subs);
+
+            $.ajax({
+                type: "PATCH",
+                traditional: true,
+                url: '/api/streams/' + id,
+                data: {
+                    subs: JSON.stringify(subs)
+                },
+                success: function (res) {
+
+                }
             });
         }

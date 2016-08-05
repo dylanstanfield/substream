@@ -30,7 +30,29 @@ class ConfigData {
             }
 
             if(didDelete) resolve(true);
-            else reject(new Error(`Unable to delete fold with id ${folderId}`));
+            else reject(new Error(`Unable to delete folder with id ${folderId}`));
+        });
+    }
+
+    setSubIdsForId(folderId, subIds) {
+        let self = this;
+
+        return new Promise((resolve, reject) => {
+
+            var didUpdate = false;
+
+            if(self.folders) {
+                for(let i in self.folders) {
+                    if(folderId == self.folders[i].id) {
+                        self.folders[i].subIds = subIds;
+                        didUpdate = true;
+                        break;
+                    }
+                }
+            }
+
+            if(didUpdate) resolve(true);
+            else reject(new Error(`Unable to set subIds folder with id ${folderId}`));
         });
     }
 

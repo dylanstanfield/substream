@@ -45,6 +45,35 @@ class FoldersHelper {
             resolve(folderVM);
         });
     }
+
+    static getFolderById(configData, id) {
+        return new Promise((resolve, reject) => {
+
+            let f = null;
+
+            if(configData.folders) {
+                for(let folder of configData.folders) {
+                    if(folder.id == id) {
+                        f = folder;
+                    }
+                }
+            }
+
+            resolve(f);
+        });
+    }
+
+    static getSubIds(subs) {
+        return new Promise((resolve, reject) => {
+            let subIds = [];
+
+            for(let sub of subs) {
+                subIds.push(sub.snippet.resourceId.channelId);
+            }
+
+            resolve(subIds);
+        })
+    }
 }
 
 module.exports = FoldersHelper;
