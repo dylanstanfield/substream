@@ -12,21 +12,34 @@ class ConfigData {
         this.folders.push(folder);
     }
 
-    removeFolderById(folderId) {
-        this.folders.forEach(function(folder, index) {
-            if(folderId == folder.id) {
-                this.folders.splice(index, 1);
-                return
+    deleteFolderById(folderId) {
+        let self = this;
+
+        return new Promise((resolve, reject) => {
+
+            var didDelete = false;
+
+            if(self.folders) {
+                for(let i in self.folders) {
+                    if(folderId == self.folders[i].id) {
+                        self.folders.splice(i, 1);
+                        didDelete = true;
+                        break;
+                    }
+                }
             }
-        })
+            console.log("b" + didDelete);
+            if(didDelete) resolve(true);
+            else reject(new Error(`Unable to delete fold with id ${folderId}`));
+        });
     }
 
     static fromJson(json) {
         let config = new ConfigData(json.version, [], json.created, json.lastSaved);
 
-        json.folders.forEach(function(folder) {
-            config.add(Folder.fromJson(folder));
-        });
+        for(let folder of json.folders) {
+            config.addFolder(Folder.fromJson(folder));
+        }
 
         return config;
     }

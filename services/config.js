@@ -59,9 +59,9 @@ class ConfigService {
         return Drive.createFile(metadata, media, auth);
     }
 
-    static saveConfig(config, auth) {
+    static saveConfig(configId, configData, auth) {
         return new Promise((resolve, reject) => {
-            Drive.updateFile(config.id, config.data, auth).then(fileId => {
+            Drive.updateFile(configId, configData, auth).then(fileId => {
                 resolve(fileId);
             }).catch(err => {
                 reject(err);

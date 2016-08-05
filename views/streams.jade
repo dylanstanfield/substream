@@ -7,11 +7,64 @@ block content
     p= JSON.stringify(config)
     h2 Folders
     ul
+
+    button(onclick="testGetAllStreams()") Get all streams json
+    button(onclick="testCreateStream()") Test create stream
+
     each stream in streams
-        li= stream.name + " - " + stream.subs.length + " subs"
+        li= stream.name + " - " + stream.subs.length + " subs "
+            button(onclick="testDeleteStream('" + stream.folderId + "')") Delete
     h2 Subscriptions
     div.subs-wrap
         each sub in subs
             div.sub
                 img(src=sub.snippet.thumbnails.default.url)
                 label= sub.snippet.title
+                label= sub.snippet.resourceId.channelId
+
+    script.
+        function testCreateStream() {
+
+            var folder = {
+                name: 'Just a test',
+                subIds: ['UC4w_tMnHl6sw5VD93tVymGw', 'UCD4INvKvy83OXwAkRjaQKtw']
+            };
+
+            $.ajax({
+                type: "POST",
+                traditional: true,
+                url: '/api/streams',
+                data: folder,
+                success: function (res) {
+
+                },
+                dataType: 'application/json'
+            });
+        }
+
+        function testDeleteStream(folderId) {
+            $.ajax({
+                type: "DELETE",
+                traditional: true,
+                url: '/api/streams',
+                data: {
+                    folderId: folderId
+                },
+                success: function (res) {
+
+                },
+                dataType: 'application/json'
+            });
+        }
+
+        function testGetAllStreams() {
+            $.ajax({
+                type: "Get",
+                traditional: true,
+                url: '/api/streams',
+                success: function (res) {
+                    console.log(res);
+                },
+                dataType: 'json'
+            });
+        }

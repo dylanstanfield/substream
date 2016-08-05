@@ -1,6 +1,7 @@
 let FolderVM = require('./../models/viewmodels/folderVM');
 
 class FoldersHelper {
+
     static buildFolderVMs(subs, configData) {
         let folders = configData.folders;
         let folderVMs = [];

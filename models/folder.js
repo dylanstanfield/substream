@@ -19,7 +19,7 @@ class Folder {
     }
 
     static fromJson(json) {
-        return new Folder(json.name, json.subIds);
+        return new Folder(json.id, json.name, json.subIds);
     }
 }
 

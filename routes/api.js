@@ -1,11 +1,50 @@
-// TODO: Create folder
+let express = require('express');
+let router = express.Router();
 
-// TODO: Remove folder
+let comb = require('comb');
+let logger = comb.logger('ss.routes.api');
 
-// TODO: Get folders
+let mw = require('./middleware');
 
-// TODO: Get single folder
+let StreamsController = require('./../controllers/streams');
 
-// TODO: Add single sub to folder
+// create new stream
+router.post('/streams', mw.apiSessionProtected, function(req, res, next) {
+    StreamsController.createStream(req.session.user, req.body.name, req.body.subIds).then(streamId => {
+        res.redirect('/streams/' + streamId);
+    }).catch(err => {
+        logger.error(err);
+    });
+});
 
-// TODO: Remove single sub from folder
+// delete stream
+router.delete('/streams', mw.apiSessionProtected, function(req, res, next) {
+    StreamsController.deleteStream(req.session.user, req.body.folderId).then(() => {
+        res.redirect('/');
+    }).catch(err => {
+        logger.error(err);
+    });
+});
+
+// get all streams
+router.get('/streams', mw.apiSessionProtected, function(req, res, next) {
+    StreamsController.getAllSubs(req.session.user).then(subs => {
+        return StreamsController.getAllStreams(req.session.user, subs);
+    }).then(streams => {
+        res.json(streams);
+    }).catch(err => {
+        logger.error(err);
+    });
+});
+
+// get single stream
+router.get('/streams/:id', mw.apiSessionProtected, function(req, res, next) {
+
+});
+
+// modify a stream
+router.patch('/streams/:id', mw.apiSessionProtected, function(req, res, next) {
+
+});
+
+module.exports = router;
