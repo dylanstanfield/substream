@@ -125,7 +125,7 @@ class DriveService {
                         logger.error(`Failed to create file`, err);
                         reject(err);
                     } else {
-                        logger.info(`Successfully created file`);
+                        logger.debug(`Successfully created file`);
                         resolve(response.id);
                     }
                 }

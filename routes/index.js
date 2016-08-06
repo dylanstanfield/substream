@@ -1,14 +1,21 @@
+// libraries
 let express = require('express');
-let router = express.Router();
-
 let comb = require('comb');
-let logger = comb.logger('ss.routes.index');
 
+// controllers
 let StreamsController = require('./../controllers/streams');
 
+// middlewares
 let mw = require('./middleware');
 
-router.get('/', mw.checkSession, function(req, res, next) {
+let router = express.Router();
+let logger = comb.logger('ss.routes.index');
+
+/**
+ * Gets user's home page or renders login
+ */
+router.get('/', mw.checkSession.redirect, function(req, res, next) {
+    logger.debug(`Request to index`);
 
     let $subs = [];
 
@@ -16,6 +23,7 @@ router.get('/', mw.checkSession, function(req, res, next) {
         $subs = subs;
         return StreamsController.getAllStreams(req.session.user, subs);
     }).then(streams => {
+        logger.debug(`Request to index successful - rendering user's home page`);
         res.render('streams', {
             user: req.session.user.info,
             config: req.session.user.config,
@@ -23,7 +31,7 @@ router.get('/', mw.checkSession, function(req, res, next) {
             streams: streams
         });
     }).catch(err => {
-        logger.error(err);
+        logger.error('Request to index failed', err);
     });
 });
 

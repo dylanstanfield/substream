@@ -6,9 +6,17 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var comb = require('comb');
-comb.logger.configure();
-var log = comb.logger('ss');
-log.level = 'ALL';
+comb.logger.configure({
+    "ss": {
+        level:"ALL",
+        appenders:[
+            {
+                type: "ConsoleAppender",
+                pattern : "{[- 5]levelName} {[-20]name} - {message}"
+            }
+        ]
+    }
+});
 
 var app = express();
 
