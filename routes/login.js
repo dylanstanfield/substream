@@ -12,7 +12,7 @@ var logger = comb.logger('ss.routes.login');
  * Redirects user to login with Google
  */
 router.get('/google', function(req, res, next) {
-    logger.debug('Sending user to authenticate with Google');
+    logger.info('Sending user to authenticate with Google');
     res.redirect(LoginController.generateGoogleAuthUrl());
 });
 
@@ -20,7 +20,7 @@ router.get('/google', function(req, res, next) {
  * Callback for Google, sets up a user given a code in the query
  */
 router.get('/google/callback', function(req, res, next) {
-    logger.debug(`Received callback from Google`);
+    logger.info(`Received callback from Google`);
     LoginController.setupUser(req.query.code).then((user) => {
         req.session.user = user;
         logger.info(`${user.info.title} logged in - redirecting to home page`);

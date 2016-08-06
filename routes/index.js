@@ -15,7 +15,7 @@ let logger = comb.logger('ss.routes.index');
  * Gets user's home page or renders login
  */
 router.get('/', mw.checkSession.redirect, function(req, res, next) {
-    logger.debug(`Request to index`);
+    logger.info(`Request to index`);
 
     let $subs = [];
 

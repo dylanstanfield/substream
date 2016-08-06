@@ -1,41 +1,72 @@
+// libraries
 var comb = require('comb');
-var logger = comb.logger('ss.controllers.streams');
-
 var YouTube = require('./../services/youtube');
 var Config = require('./../services/config');
+
+// helpers
 var OAuth2Helper = require('./../helpers/oauth2');
-
 let FoldersHelper = require('./../helpers/folders');
-let ConfigData = require('./../models/configData');
 
+// models
+let ConfigData = require('./../models/configData');
 let Folder = require('./../models/folder');
+
+var logger = comb.logger('ss.controllers.streams');
 
 class StreamsController {
 
+    /**
+     * Gets all streams for a user
+     * @param user
+     * @param subs
+     * @returns {Promise}
+     */
     static getAllStreams(user, subs) {
+        logger.debug(`Attempting to get all user's streams...`);
+
         return new Promise((resolve, reject) => {
             FoldersHelper.buildFolderVMs(subs, ConfigData.fromJson(user.config.data)).then(folderVMs => {
+                logger.debug(`Successfully got all user's streams`);
                 resolve(folderVMs);
             }).catch((err) => {
+                logger.error(`Failed to get all user's streams`, err);
                 reject(err);
             });
         });
     }
 
+    /**
+     * Gets a stream for a folderId
+     * @param user
+     * @param subs
+     * @param folderId
+     * @returns {Promise.<T>}
+     */
     static getStream(user, subs, folderId) {
+        logger.debug(`Attempting to get user's stream...`);
+
         return new Promise((resolve, reject) => {
             FoldersHelper.buildFolderVM(subs, ConfigData.fromJson(user.config.data), folderId).then(folderVM => {
+                logger.debug(`Successfully got user's stream`);
                 resolve(folderVM);
             });
         }).catch((err) => {
+            logger.error(`Failed to get user's stream`, err);
             reject(err);
         });
     }
 
+    /**
+     * Creates a stream for a user
+     * @param user
+     * @param name
+     * @param subIds
+     * @returns {Promise}
+     */
     static createStream(user, name, subIds) {
+        logger.debug(`Attempting to create stream...`);
 
         return new Promise((resolve, reject) => {
-
             let folder = new Folder();
             folder.name = name;
             folder.subIds = subIds;
@@ -52,14 +83,23 @@ class StreamsController {
                 return Config.getConfig($auth);
             }).then((config) => {
                 user.config = config;
+                logger.debug(`Successfully created stream`);
                 resolve(folder.id);
             }).catch(err => {
+                logger.error(`Failed to create stream`, err);
                 reject(err);
             });
         });
     }
 
+    /**
+     * Deletes a users stream by id
+     * @param user
+     * @param folderId
+     * @returns {Promise}
+     */
     static deleteStream(user, folderId) {
+        logger.debug(`Attempting to delete stream...`);
 
         let configData = ConfigData.fromJson(user.config.data);
         let $auth = null;
@@ -74,14 +114,24 @@ class StreamsController {
                 return Config.getConfig($auth);
             }).then((config) => {
                 user.config = config;
+                logger.debug(`Successfully deleted stream`);
                 resolve();
             }).catch(err => {
+                logger.error(`Failed to delete stream`, err);
                 reject(err);
             });
         })
     }
 
+    /**
+     * Replaces the subIds for a folder from a list of subs
+     * @param user
+     * @param folderId
+     * @param subs
+     * @returns {Promise}
+     */
     static updateStream(user, folderId, subs) {
+        logger.debug(`Attempting to update stream...`);
 
         let configData = ConfigData.fromJson(user.config.data);
         let $auth = null;
@@ -98,28 +148,46 @@ class StreamsController {
                 return Config.getConfig($auth);
             }).then((config) => {
                 user.config = config;
+                logger.debug(`Successfully updated stream`);
                 resolve();
             }).catch(err => {
+                logger.error(`Failed to update stream`, err);
                 reject(err);
             });
         });
     }
 
+    /**
+     * Gets all user's subscriptions
+     * @param user
+     * @returns {Promise}
+     */
     static getAllSubs(user) {
+        logger.debug(`Attempting to get all subs...`);
+
         return new Promise((resolve, reject) => {
             OAuth2Helper.getAuth(user.creds).then(auth => {
                 return YouTube.getSubscriptions(auth);
             }).then(subs => {
+                logger.debug(`Successfully got all subs`);
                 resolve(subs);
             }).catch(err => {
+                logger.error(`Failed to get all subs`, err);
                 reject(err);
             })
         });
     }
 
+    /**
+     * Gets recent videos for a stream
+     * @param user
+     * @param folderId
+     * @returns {Promise}
+     */
     static getVideos(user, folderId) {
-        return new Promise((resolve, reject) => {
+        logger.debug(`Attempting to get videos for stream...`);
 
+        return new Promise((resolve, reject) => {
             let $auth = null;
 
             OAuth2Helper.getAuth(user.creds).then(auth => {
@@ -134,8 +202,10 @@ class StreamsController {
 
                 return Promise.all(videoCalls);
             }).then(results => {
+                logger.debug(`Successfully got videos for stream`);
                 resolve(results);
             }).catch(err => {
+                logger.error(`Failed to get videos for stream`, err);
                 reject(err);
             })
         });

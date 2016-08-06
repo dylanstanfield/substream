@@ -18,7 +18,7 @@ class checkSession {
             logger.debug(`User's session is good`);
             next();
         } else {
-            logger.debug(`User is not in session - rendering login...`);
+            logger.info(`User is not in session - rendering login...`);
             res.render('index', { title: 'substream' });
         }
     }

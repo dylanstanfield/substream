@@ -16,6 +16,10 @@ var logger = comb.logger('ss.controllers.login');
 
 class LoginController {
 
+    /**
+     * Gets the url for users to authorize this app
+     * @returns {*}
+     */
     static generateGoogleAuthUrl() {
         let client = new OAuth2(
             googleConfig.clientId,
@@ -28,7 +32,14 @@ class LoginController {
         });
     }
 
+    /**
+     * Completes Google authorization then gets user's config data and channel info
+     * @param accessCode
+     * @returns {Promise}
+     */
     static setupUser(accessCode) {
+        logger.debug(`Setting up user...`);
+
         return new Promise((resolve, reject) => {
             let auth = new OAuth2(
                 googleConfig.clientId,
@@ -46,6 +57,7 @@ class LoginController {
                 logger.debug(`Retrieved config and user info for ${user.info.title}`);
                 resolve(user);
             }).catch(err => {
+                logger.error(`Failed to setup user`, err);
                 reject(err);
             });
         });
