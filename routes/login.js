@@ -14,6 +14,7 @@ router.get('/google', function(req, res, next) {
 router.get('/google/callback', function(req, res, next) {
     LoginController.setupUser(req.query.code).then((user) => {
         req.session.user = user;
+        logger.info(`${user.info.title} logged in`);
         res.redirect('/');
     }).catch(err => {
         logger.error(err);

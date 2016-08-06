@@ -8,9 +8,7 @@ let StreamsController = require('./../controllers/streams');
 
 let mw = require('./middleware');
 
-router.use('/', mw.checkSession);
-
-router.get('/', function(req, res, next) {
+router.get('/', mw.checkSession, function(req, res, next) {
 
     let $subs = [];
 
