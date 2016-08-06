@@ -1,3 +1,4 @@
+// models
 var Folder = require('./folder');
 
 class ConfigData {
@@ -8,10 +9,19 @@ class ConfigData {
         this.lastSaved = lastSaved;
     }
 
+    /**
+     * Adds a folder to this config data
+     * @param folder
+     */
     addFolder(folder) {
         this.folders.push(folder);
     }
 
+    /**
+     * Deletes a folder in this config data, given its id
+     * @param folderId
+     * @returns {Promise}
+     */
     deleteFolderById(folderId) {
         let self = this;
 
@@ -34,6 +44,12 @@ class ConfigData {
         });
     }
 
+    /**
+     * Sets the subIds of a folder in this config data, given the folder id
+     * @param folderId
+     * @param subIds
+     * @returns {Promise}
+     */
     setSubIdsForId(folderId, subIds) {
         let self = this;
 
@@ -56,6 +72,11 @@ class ConfigData {
         });
     }
 
+    /**
+     * Converts json to a config data object
+     * @param json
+     * @returns {ConfigData}
+     */
     static fromJson(json) {
         let config = new ConfigData(json.version, [], json.created, json.lastSaved);
 

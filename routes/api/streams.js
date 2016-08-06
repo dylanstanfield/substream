@@ -9,7 +9,7 @@ let StreamsController = require('./../../controllers/streams');
 let mw = require('./../middleware/index');
 
 let router = express.Router();
-let logger = comb.logger('ss.routes.api');
+let logger = comb.logger('ss.routes.api.streams');
 
 router.use('/', mw.checkSession.statusCode);
 

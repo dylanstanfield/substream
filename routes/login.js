@@ -6,7 +6,7 @@ var comb = require('comb');
 var LoginController = require('./../controllers/login');
 
 var router = express.Router();
-var logger = comb.logger('ss.routes.auth');
+var logger = comb.logger('ss.routes.login');
 
 /**
  * Redirects user to login with Google

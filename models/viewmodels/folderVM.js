@@ -5,6 +5,10 @@ class FolderVM {
         this.subs = subs;
     }
 
+    /**
+     * Adds a folder to this folder view model
+     * @param sub
+     */
     add(sub) {
         this.subs.push(sub);
     }
