@@ -3,7 +3,12 @@ var google = require('googleapis');
 var YouTube = google.youtube('v3');
 var comb = require('comb');
 
-// logger
+// config
+var config = require('./../config/service').youtube;
+
+// helpers
+let DatesHelper = require('./../helpers/dates');
+
 var logger = comb.logger('ss.services.youtube');
 
 class YouTubeService {
@@ -66,7 +71,9 @@ class YouTubeService {
         logger.debug(`Getting videos for ${channelId}...`);
 
         return new Promise((resolve, reject) => {
-            getVideos(auth, channelId).then(videos => {
+            let publishedAfter = DatesHelper.startOfPastMonth(config.numMonthsToFetchVideos);
+
+            getVideos(auth, channelId, DatesHelper.convertToRCF3339(publishedAfter)).then(videos => {
                 resolve(videos);
             }).catch(err => {
                 logger.error(`Failed to get videos - ${err.message}`);
@@ -92,7 +99,7 @@ function getSubscriptions(auth, subs, nextPageToken) {
                 if(err) {
                     reject(err);
                 } else {
-                    if(subs == undefined) subs = []; // if it's the first time thought initialize the array
+                    if(subs == undefined) subs = []; // initialize subs if they are undefined (first pass probably)
                     subs = subs.concat(response.items);
                     resolve(getSubscriptions(auth, subs, response.nextPageToken)); // recursive!
                 }
@@ -103,19 +110,16 @@ function getSubscriptions(auth, subs, nextPageToken) {
     }
 }
 
-function getVideos(auth, channelId, videos, nextPageToken) {
+function getVideos(auth, channelId, publishedAfter, videos, nextPageToken) {
 
-    if(nextPageToken || videos == undefined) {
-
-        if(videos && videos.length >= 100) {
-            return videos;
-        }
+    if(nextPageToken || videos == undefined) { // videos and nextPageToken will be undefined first time through
 
         return new Promise((resolve, reject) => {
 
             let params = {
                 part: 'snippet',
                 type: 'video',
+                publishedAfter: publishedAfter,
                 channelId: channelId,
                 maxResults: 50,
                 order: 'date',
@@ -129,14 +133,14 @@ function getVideos(auth, channelId, videos, nextPageToken) {
                         logger.error(`Failed to get videos for ${channelId}`, err);
                         reject(err);
                     } else {
-                        if(videos == undefined) videos = [];
+                        if(videos == undefined) videos = []; // initialize videos if they are undefined (first pass probably)
                         videos = videos.concat(response.items);
-                        resolve(getVideos(auth, channelId, videos, response.nextPageToken));
+                        resolve(getVideos(auth, channelId, publishedAfter, videos, response.nextPageToken)); // recursive!
                     }
                 }
             );
         });
-    } else {
+    } else { // if there is no nextPageToken and videos is initialized, we are done
         return videos;
     }
 }
