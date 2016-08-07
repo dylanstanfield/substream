@@ -1,0 +1,30 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<dom-module id="create-page">
+    <template>
+        <style>
+            :host {
+                display: none;
+            }
+            :host([active]) {
+                display: block;
+            }
+        </style>
+
+        <h1>create</h1>
+
+    </template>
+    <script>
+        Polymer({
+            is: "create-page",
+            properties: {
+                streams: Array,
+                active: {
+                    type: Boolean,
+                    value: false,
+                    reflectToAttribute: true
+                }
+            }
+        });
+    </script>
+</dom-module>

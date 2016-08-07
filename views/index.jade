@@ -2,6 +2,6 @@ html
     head
         // Polyfill Web Components for older browsers
         script(src='/bower_components/webcomponentsjs/webcomponents-lite.min.js')
-        link(rel="import" href="imports.html")
+        link(rel="import" href="/components/substream-app/substream-app.html")
     body
         substream-app(user = JSON.stringify(user), subs = JSON.stringify(subs), streams = JSON.stringify(streams))

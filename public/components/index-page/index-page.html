@@ -1,0 +1,32 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<dom-module id="index-page">
+    <template>
+        <style>
+            :host {
+                display: none;
+            }
+            :host([active]) {
+                display: block;
+            }
+        </style>
+
+        <h1>streams</h1>
+        <template is="dom-repeat" items="{{streams}}">
+            <div>{{item.name}}</div>
+        </template>
+    </template>
+    <script>
+        Polymer({
+            is: "index-page",
+            properties: {
+                streams: Array,
+                active: {
+                    type: Boolean,
+                    value: false,
+                    reflectToAttribute: true
+                }
+            }
+        });
+    </script>
+</dom-module>

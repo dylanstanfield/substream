@@ -1,4 +1,10 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/app-route/app-location.html">
+<link rel="import" href="/bower_components/app-route/app-route.html">
+
+<link rel="import" href="/components/index-page/index-page.html">
+<link rel="import" href="/components/create-page/create-page.html">
+
 
 <dom-module id="substream-app">
     <template>
@@ -6,8 +12,24 @@
         <p>{{user.title}}</p>
         <p>subs count: <span>{{subs.length}}</span></p>
         <p>streams count <span>{{streams.length}}</span></p>
-        <stream-list streams="{{streams}}"></stream-list>
-        <sub-list subs="{{subs}}"></sub-list>
+
+        <app-location route="{{route}}"></app-location>
+
+        <app-route route="{{route}}"
+                   pattern="/"
+                   active="{{indexActive}}"></app-route>
+
+        <app-route route="{{route}}"
+                   pattern="/create"
+                   active="{{createActive}}"></app-route>
+
+        <main>
+            <index-page streams="{{streams}}"
+                        active="{{indexActive}}"></index-page>
+
+            <create-page active="{{createActive}}"></create-page>
+        </main>
+
     </template>
     <script>
         Polymer({
