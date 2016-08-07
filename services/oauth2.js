@@ -19,7 +19,7 @@ class OAuth2Service {
             oauth2Client.getToken(code, function(err, tokens) {
                 // Now tokens contains an access_token and an optional refresh_token. Save them.
                 if (err) {
-                    logger.error(`Failed to set tokens for code`, err);
+                    logger.error(`Failed to set tokens for code - ${err.message}`);
                     reject(err);
                 } else {
                     logger.debug(`Successfully set tokens for code`);

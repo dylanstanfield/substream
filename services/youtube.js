@@ -26,7 +26,7 @@ class YouTubeService {
                 logger.debug(`Successfully got subscriptions`);
                 resolve(subs);
             }).catch(err => {
-                logger.error(`Failed to get subscriptions in get next page - ${err.message}`, err);
+                logger.error(`Failed to get subscriptions in get next page - ${err.message}`);
                 reject(err);
             });
         });
@@ -50,7 +50,7 @@ class YouTubeService {
                 },
                 function(err, response) {
                     if(err) {
-                        logger.error(`Failed to get user info`, err);
+                        logger.error(`Failed to get user info - ${err.message}`);
                         reject(err);
                     } else {
                         logger.debug(`Successfully got user info`);
@@ -83,6 +83,13 @@ class YouTubeService {
     }
 }
 
+/**
+ * Private method that loops to make calls to YouTube for subscriptions
+ * @param auth
+ * @param subs
+ * @param nextPageToken
+ * @returns {*}
+ */
 function getSubscriptions(auth, subs, nextPageToken) {
     if(nextPageToken || subs == undefined) { // subs is undefined on first time through
         return new Promise((resolve, reject) => {
@@ -110,6 +117,15 @@ function getSubscriptions(auth, subs, nextPageToken) {
     }
 }
 
+/**
+ * Private method that loops to make calls to YouTube for videos
+ * @param auth
+ * @param channelId
+ * @param publishedAfter
+ * @param videos
+ * @param nextPageToken
+ * @returns {*}
+ */
 function getVideos(auth, channelId, publishedAfter, videos, nextPageToken) {
 
     if(nextPageToken || videos == undefined) { // videos and nextPageToken will be undefined first time through

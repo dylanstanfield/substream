@@ -31,7 +31,7 @@ router.get('/', mw.checkSession.redirect, function(req, res, next) {
             streams: streams
         });
     }).catch(err => {
-        logger.error('Request to index failed', err);
+        logger.error(`Request to index failed - ${err.message}`);
     });
 });
 

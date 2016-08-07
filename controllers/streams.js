@@ -29,7 +29,7 @@ class StreamsController {
                 logger.debug(`Successfully got all user's streams`);
                 resolve(folderVMs);
             }).catch((err) => {
-                logger.error(`Failed to get all user's streams`, err);
+                logger.error(`Failed to get all user's streams - ${err.message}`);
                 reject(err);
             });
         });
@@ -51,7 +51,7 @@ class StreamsController {
                 resolve(folderVM);
             });
         }).catch((err) => {
-            logger.error(`Failed to get user's stream`, err);
+            logger.error(`Failed to get user's stream - ${err.message}`);
             reject(err);
         });
     }
@@ -86,7 +86,7 @@ class StreamsController {
                 logger.debug(`Successfully created stream`);
                 resolve(folder.id);
             }).catch(err => {
-                logger.error(`Failed to create stream`, err);
+                logger.error(`Failed to create stream - ${err.message}`);
                 reject(err);
             });
         });
@@ -117,7 +117,7 @@ class StreamsController {
                 logger.debug(`Successfully deleted stream`);
                 resolve();
             }).catch(err => {
-                logger.error(`Failed to delete stream`, err);
+                logger.error(`Failed to delete stream - ${err.message}`);
                 reject(err);
             });
         })
@@ -151,7 +151,7 @@ class StreamsController {
                 logger.debug(`Successfully updated stream`);
                 resolve();
             }).catch(err => {
-                logger.error(`Failed to update stream`, err);
+                logger.error(`Failed to update stream - ${err.message}`);
                 reject(err);
             });
         });
@@ -172,7 +172,7 @@ class StreamsController {
                 logger.debug(`Successfully got all subs`);
                 resolve(subs);
             }).catch(err => {
-                logger.error(`Failed to get all subs`, err);
+                logger.error(`Failed to get all subs - ${err.message}`);
                 reject(err);
             })
         });
@@ -205,7 +205,7 @@ class StreamsController {
                 logger.debug(`Successfully got videos for stream`);
                 resolve(results);
             }).catch(err => {
-                logger.error(`Failed to get videos for stream`, err);
+                logger.error(`Failed to get videos for stream - ${err.message}`);
                 reject(err);
             })
         });

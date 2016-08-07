@@ -48,7 +48,7 @@ class ConfigService {
                     data: data
                 });
             }).catch((err) => {
-                logger.error(`Failed to get config file`, err);
+                logger.error(`Failed to get config file - ${err.message}`);
                 reject(err);
             });
         });
@@ -92,7 +92,7 @@ class ConfigService {
                 logger.debug(`Successfully saved config file ${fileId}`);
                 resolve(fileId);
             }).catch(err => {
-                logger.error(`Failed to save config file`, err);
+                logger.error(`Failed to save config file - ${err.message}`);
                 reject(err);
             });
         });

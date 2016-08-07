@@ -122,7 +122,7 @@ class DriveService {
                 },
                 function(err, response) {
                     if(err) {
-                        logger.error(`Failed to create file`, err);
+                        logger.error(`Failed to create file - ${err.message}`);
                         reject(err);
                     } else {
                         logger.debug(`Successfully created file`);

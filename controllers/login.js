@@ -57,7 +57,7 @@ class LoginController {
                 logger.debug(`Retrieved config and user info for ${user.info.title}`);
                 resolve(user);
             }).catch(err => {
-                logger.error(`Failed to setup user`, err);
+                logger.error(`Failed to setup user - ${err.message}`);
                 reject(err);
             });
         });

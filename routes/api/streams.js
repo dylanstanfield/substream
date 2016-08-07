@@ -23,7 +23,7 @@ router.post('/', function(req, res, next) {
         logger.debug(`Request to create stream was successful`);
         res.json(streamId);
     }).catch(err => {
-        logger.error(`Request to create stream failed`, err);
+        logger.error(`Request to create stream failed - ${err.message}`);
     });
 });
 
@@ -37,7 +37,7 @@ router.delete('/', function(req, res, next) {
         logger.debug(`Request to delete stream was successful`);
         res.sendStatus(200); // Success
     }).catch(err => {
-        logger.error(`Request to delete stream failed`, err);
+        logger.error(`Request to delete stream failed - ${err.message}`);
     });
 });
 
@@ -53,7 +53,7 @@ router.get('/', function(req, res, next) {
         logger.debug(`Request to get all streams was successful`);
         res.json(streams);
     }).catch(err => {
-        logger.error(`Request to get all streams failed`, err);
+        logger.error(`Request to get all streams failed - ${err.message}`);
     });
 });
 
@@ -69,7 +69,7 @@ router.get('/:id', function(req, res, next) {
         logger.debug(`Request to get stream was successful`);
         res.json(stream);
     }).catch(err => {
-        logger.error(`Request to get stream failed`, err);
+        logger.error(`Request to get stream failed - ${err.message}`);
     });
 });
 
@@ -83,7 +83,7 @@ router.patch('/:id', function(req, res, next) {
         logger.debug(`Request to modify stream was successful`);
         res.sendStatus(200); // Success
     }).catch(err => {
-        logger.error(`Request to modify stream failed`, err);
+        logger.error(`Request to modify stream failed - ${err.message}`);
     });
 });
 
@@ -97,7 +97,7 @@ router.get('/:id/videos', function(req, res, next) {
         logger.debug(`Request to get videos for a stream was successful`);
         res.json(results);
     }).catch(err => {
-        logger.error(`Request to get videos for a stream failed`, err);
+        logger.error(`Request to get videos for a stream failed - ${err.message}`);
     })
 });
 

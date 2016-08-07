@@ -26,7 +26,7 @@ router.get('/google/callback', function(req, res, next) {
         logger.info(`${user.info.title} logged in - redirecting to home page`);
         res.redirect('/');
     }).catch(err => {
-        logger.error(`Login failed`, err);
+        logger.error(`Login failed - ${err.message}`);
         res.redirect('/'); // TODO set up an error message
     });
 });
