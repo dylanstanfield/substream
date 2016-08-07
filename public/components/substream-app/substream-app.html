@@ -4,7 +4,7 @@
 
 <link rel="import" href="/components/index-page/index-page.html">
 <link rel="import" href="/components/create-page/create-page.html">
-
+<link rel="import" href="/components/stream-page/stream-page.html">
 
 <dom-module id="substream-app">
     <template>
@@ -13,21 +13,34 @@
         <p>subs count: <span>{{subs.length}}</span></p>
         <p>streams count <span>{{streams.length}}</span></p>
 
-        <app-location route="{{route}}"></app-location>
+        <app-location route="{{route}}"
+                      use-hash-as-path></app-location>
 
         <app-route route="{{route}}"
                    pattern="/"
                    active="{{indexActive}}"></app-route>
 
         <app-route route="{{route}}"
+                   pattern="/s/:id"
+                   data="{{streamData}}"
+                   active="{{streamActive}}"></app-route>
+
+        <app-route route="{{route}}"
                    pattern="/create"
                    active="{{createActive}}"></app-route>
 
         <main>
-            <index-page streams="{{streams}}"
+            <index-page route="{{route}}"
+                        streams="{{streams}}"
                         active="{{indexActive}}"></index-page>
 
-            <create-page active="{{createActive}}"></create-page>
+            <create-page route="{{route}}"
+                         subs="[[subs]]"
+                         active="{{createActive}}"></create-page>
+
+            <stream-page route="{{route}}"
+                         stream-id="{{streamData.id}}"
+                         active="{{streamActive}}"></stream-page>
         </main>
 
     </template>
@@ -38,6 +51,12 @@
                 user: Object,
                 subs: Array,
                 streams: Array
+            },
+
+            attached: function() {
+                if(!this.route.path) {
+                    this.set('route.path', '/');
+                }
             }
         });
     </script>

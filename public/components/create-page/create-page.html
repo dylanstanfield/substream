@@ -1,4 +1,5 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
 
 <dom-module id="create-page">
     <template>
@@ -9,21 +10,81 @@
             :host([active]) {
                 display: block;
             }
+
+            .selected {
+                background: #999999;
+            }
         </style>
 
-        <h1>create</h1>
+        <h1>create stream</h1>
+
+        <div>
+            <label>Stream name</label>
+            <input type="text" id="streamName" />
+        </div>
+
+        <div>
+            <label>Select your subscriptions</label>
+            <template is="dom-repeat" items="{{subs}}">
+                <div on-tap="selectStream" id="{{item.snippet.resourceId.channelId}}">{{item.snippet.title}}</div>
+            </template>
+        </div>
+
+        <div>
+            <button on-tap="createStream">Create Stream</button>
+        </div>
+
+        <iron-ajax
+                id="createRequest"
+                url="/api/streams"
+                method="POST"
+                content-type="application/json"
+                handle-as="json"
+                on-response="handleCreateStream"
+                debounce-duration="300"></iron-ajax>
 
     </template>
     <script>
         Polymer({
             is: "create-page",
             properties: {
-                streams: Array,
+                subs: Array,
+                selectedSubIds: {
+                    type: Array,
+                    value: []
+                },
                 active: {
                     type: Boolean,
                     value: false,
                     reflectToAttribute: true
                 }
+            },
+
+            selectStream: function(e, detail) {
+                if(e.target.classList.contains("selected")) {
+                    e.target.classList.remove("selected");
+                    var i = this.selectedSubIds.indexOf(e.target.id);
+                    this.splice('selectedSubIds', i, 1);
+                } else {
+                    e.target.classList.add("selected");
+                    this.push('selectedSubIds', e.target.id);
+                }
+            },
+
+            createStream: function() {
+                var req = this.$.createRequest;
+
+                req.body = {
+                    subIds: this.selectedSubIds,
+                    name: this.$.streamName.value
+                };
+
+                req.generateRequest();
+            },
+
+            handleCreateStream: function(e) {
+                console.log(e.detail.response);
+                this.set('route.path', '/');
             }
         });
     </script>

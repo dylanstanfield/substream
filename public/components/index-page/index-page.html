@@ -13,7 +13,7 @@
 
         <h1>streams</h1>
         <template is="dom-repeat" items="{{streams}}">
-            <div>{{item.name}}</div>
+            <div on-tap="redirectToStream" id="{{item.folderId}}">{{item.name}}</div>
         </template>
     </template>
     <script>
@@ -26,6 +26,10 @@
                     value: false,
                     reflectToAttribute: true
                 }
+            },
+
+            redirectToStream: function(e) {
+                this.set('route.path', '/s/' + e.target.id);
             }
         });
     </script>

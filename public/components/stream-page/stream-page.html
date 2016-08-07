@@ -1,0 +1,53 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<dom-module id="stream-page">
+    <template>
+        <style>
+            :host {
+                display: none;
+            }
+            :host([active]) {
+                display: block;
+            }
+        </style>
+
+        <iron-ajax
+                auto
+                url="[[_computeUrl(streamId)]]"
+                method="GET"
+                handle-as="json"
+                on-response="handleGetVideos"
+                debounce-duration="300"></iron-ajax>
+
+        <h1>stream <span>{{streamId}}</span></h1>
+
+        <div>
+            <template is="dom-repeat" items="{{videos}}">
+                <div>{{item.snippet.title}}</div>
+            </template>
+        </div>
+
+    </template>
+    <script>
+        Polymer({
+            is: "stream-page",
+            properties: {
+                videos: Array,
+                active: {
+                    type: Boolean,
+                    value: false,
+                    reflectToAttribute: true
+                }
+            },
+
+            handleGetVideos: function(e) {
+                console.log(e.detail.response);
+                this.videos = e.detail.response
+            },
+
+            _computeUrl(streamId) {
+                return '/api/streams/' + streamId + '/videos'
+            }
+        });
+    </script>
+</dom-module>

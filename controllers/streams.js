@@ -203,7 +203,16 @@ class StreamsController {
                 return Promise.all(videoCalls);
             }).then(results => {
                 logger.debug(`Successfully got videos for stream`);
-                resolve(results);
+
+                let videos = [];
+
+                for(let set of results) {
+                    for(let video of set) {
+                        videos.push(video);
+                    }
+                }
+
+                resolve(videos);
             }).catch(err => {
                 logger.error(`Failed to get videos for stream - ${err.message}`);
                 reject(err);
