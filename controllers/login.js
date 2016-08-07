@@ -27,7 +27,7 @@ class LoginController {
             googleConfig.redirectUrl);
 
         return client.generateAuthUrl({
-            access_type: 'offline', // 'online' (default) or 'offline' (gets refresh_token)
+            // access_type: 'offline', // 'online' (default) or 'offline' (gets refresh_token)
             scope: googleConfig.scopes
         });
     }

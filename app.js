@@ -31,10 +31,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/bower_components', express.static(path.join(__dirname, 'bower_components')));
 
 app.use(session({
   store: new SQLiteStore,
-  secret: 'your secret',
+  secret: 'SuperSecretThingNobodyWillGuessThisForSure',
   resave: true,
   saveUninitialized: true,
   cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 } // 1 week

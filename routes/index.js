@@ -24,7 +24,31 @@ router.get('/', mw.checkSession.redirect, function(req, res, next) {
         return StreamsController.getAllStreams(req.session.user, subs);
     }).then(streams => {
         logger.debug(`Request to index successful - rendering user's home page`);
-        res.render('streams', {
+        res.render('index', {
+            user: req.session.user.info,
+            config: req.session.user.config,
+            subs: $subs,
+            streams: streams
+        });
+    }).catch(err => {
+        logger.error(`Request to index failed - ${err.message}`);
+    });
+});
+
+/**
+ * For development
+ */
+router.get('/tests', mw.checkSession.redirect, function(req, res, next) {
+    logger.info(`Request to tests page`);
+
+    let $subs = [];
+
+    StreamsController.getAllSubs(req.session.user).then(subs => {
+        $subs = subs;
+        return StreamsController.getAllStreams(req.session.user, subs);
+    }).then(streams => {
+        logger.debug(`Request to test page successful - rendering user's home page`);
+        res.render('tests', {
             user: req.session.user.info,
             config: req.session.user.config,
             subs: $subs,

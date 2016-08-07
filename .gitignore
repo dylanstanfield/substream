@@ -5,6 +5,7 @@ node_modules
 logs
 config/google.js
 sessions.db
+bower_components
 
 # Logs
 logs

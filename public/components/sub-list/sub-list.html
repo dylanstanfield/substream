@@ -1,0 +1,18 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<dom-module id="sub-list">
+    <template>
+        <h1>subscriptions</h1>
+        <template is="dom-repeat" items="{{subs}}">
+            <div>{{item.snippet.title}}</div>
+        </template>
+    </template>
+    <script>
+        Polymer({
+            is: "sub-list",
+            properties: {
+                subs: Array
+            }
+        });
+    </script>
+</dom-module>

@@ -19,7 +19,7 @@ class checkSession {
             next();
         } else {
             logger.info(`User is not in session - rendering login...`);
-            res.render('index', { title: 'substream' });
+            res.render('login', { title: 'substream' });
         }
     }
 

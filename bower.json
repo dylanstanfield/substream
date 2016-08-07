@@ -1,0 +1,17 @@
+{
+  "name": "substream",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Dylan Stanfield"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/dylanstanfield/substream",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

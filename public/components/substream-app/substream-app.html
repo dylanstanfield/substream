@@ -1,0 +1,22 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<dom-module id="substream-app">
+    <template>
+        <h1>substream</h1>
+        <p>{{user.title}}</p>
+        <p>subs count: <span>{{subs.length}}</span></p>
+        <p>streams count <span>{{streams.length}}</span></p>
+        <stream-list streams="{{streams}}"></stream-list>
+        <sub-list subs="{{subs}}"></sub-list>
+    </template>
+    <script>
+        Polymer({
+            is: "substream-app",
+            properties: {
+                user: Object,
+                subs: Array,
+                streams: Array
+            }
+        });
+    </script>
+</dom-module>

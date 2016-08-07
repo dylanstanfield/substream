@@ -1,6 +1,7 @@
-extends layout
-
-block content
-  h1= title
-  p Welcome to #{title}
-  a(href="/login/google") Login with Google
+html
+    head
+        // Polyfill Web Components for older browsers
+        script(src='/bower_components/webcomponentsjs/webcomponents-lite.min.js')
+        link(rel="import" href="imports.html")
+    body
+        substream-app(user = JSON.stringify(user), subs = JSON.stringify(subs), streams = JSON.stringify(streams))
