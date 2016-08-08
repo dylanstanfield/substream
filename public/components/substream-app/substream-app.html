@@ -12,10 +12,11 @@
         <style>
             :host {
                 display: block;
+                margin: 0 48px;
+                height: 100%;
             }
 
             header {
-                margin: 0 48px;
                 padding: 0 24px;
                 line-height: 96px;
                 border-bottom: 1px solid rgba(255, 255, 255, .3);
@@ -32,8 +33,9 @@
             }
 
             main {
-                max-width: 900px;
-                margin: 48px auto;
+                /*max-width: 960px;*/
+                /*margin: 48px auto;*/
+                position: relative;
             }
         </style>
 
@@ -60,8 +62,7 @@
 
         <main>
             <index-page route="{{route}}"
-                        streams="{{streams}}"
-                        active="{{indexActive}}"></index-page>
+                        streams="{{streams}}"></index-page>
 
             <create-page route="{{route}}"
                          subs="[[subs]]"

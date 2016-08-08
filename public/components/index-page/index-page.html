@@ -4,31 +4,26 @@
     <template>
         <style>
             :host {
-                display: none;
-            }
-
-            :host([active]) {
                 display: block;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 300px;
             }
 
             h2 {
-                font-size: 16px;
+                font-size: 12px;
                 font-weight: normal;
+                text-transform: uppercase;
                 color: #999999;
-            }
-
-            .streams-wrap {
-                font-size: 0;
             }
 
             .stream {
                 background: rgba(255, 255, 255, .1);
                 box-sizing: border-box;
-                margin: 12px;
+                margin: 12px 0;
                 cursor: pointer;
                 padding: 0 16px;
-                width: 276px;
-                display: inline-block;
             }
 
             .stream:hover {
@@ -52,23 +47,11 @@
                 vertical-align: middle;
             }
 
-            .stream .sub-thumbnails .more-subs {
-                font-size: 10px;
-                display: inline-block;
-                vertical-align: middle;
-                text-transform: uppercase;
-            }
-
-            .more-subs span {
-                font-size: 30px;
-                margin-left: 6px;
-            }
-
         </style>
 
         <h2>My Streams</h2>
 
-        <div class="streams-wrap">
+        <div class="streams-wrap" id="streamsWrap">
             <template is="dom-repeat" items="{{streams}}">
                 <div class="stream" on-tap="redirectToStream">
                     <span class="stream-name">{{item.name}}</span>
@@ -79,19 +62,9 @@
                                 <img src="{{item.snippet.thumbnails.default.url}}" title="{{item.snippet.title}}" alt="{{item.snippet.title}}">
                             </template>
                         </template>
-
-                        <template is="dom-if" if="{{_hasMoreThanMaxPreview(item.subs.length)}}">
-                            <div class="more-subs">
-                                <span>&middot;&middot;&middot;</span>
-                            </div>
-                        </template>
                     </div>
                 </div>
             </template>
-
-            <div on-tap="redirectCreate" class="stream">
-                <span class="stream-name">Add Stream</span>
-            </div>
         </div>
 
     </template>
@@ -108,7 +81,7 @@
             },
 
             redirectToStream: function() {
-                this.set('route.path', '/s/' + event.model.item.folderId);
+                window.location.href = '#/s/' + event.model.item.folderId;
             },
 
             _maxNumPreviews: function(i) {

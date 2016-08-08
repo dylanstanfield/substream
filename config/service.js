@@ -1,5 +1,5 @@
 module.exports = {
     youtube: {
-        numMonthsToFetchVideos: 3
+        numMonthsToFetchVideos: 2
     }
 };
