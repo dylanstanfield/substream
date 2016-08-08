@@ -1,5 +1,8 @@
 // libraries
 var comb = require('comb');
+var moment = require('moment');
+
+// services
 var YouTube = require('./../services/youtube');
 var Config = require('./../services/config');
 
@@ -212,6 +215,8 @@ class StreamsController {
                     }
                 }
 
+                videos.sort(sortByPublishedTime);
+
                 resolve(videos);
             }).catch(err => {
                 logger.error(`Failed to get videos for stream - ${err.message}`);
@@ -219,6 +224,14 @@ class StreamsController {
             })
         });
     }
+}
+
+function sortByPublishedTime(a,b) {
+    let aMilli = moment(a.snippet.publishedAt, "YYYY-MM-DDTHH:mm:ssZ").unix();
+    let bMilli = moment(b.snippet.publishedAt, "YYYY-MM-DDTHH:mm:ssZ").unix();
+    if(aMilli < bMilli) return 1;
+    if(aMilli > bMilli) return -1;
+    return 0;
 }
 
 module.exports = StreamsController;

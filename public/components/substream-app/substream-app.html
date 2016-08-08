@@ -8,10 +8,39 @@
 
 <dom-module id="substream-app">
     <template>
-        <h1>substream</h1>
-        <p>{{user.title}}</p>
-        <p>subs count: <span>{{subs.length}}</span></p>
-        <p>streams count <span>{{streams.length}}</span></p>
+
+        <style>
+            :host {
+                display: block;
+            }
+
+            header {
+                margin: 0 48px;
+                padding: 0 24px;
+                line-height: 96px;
+                border-bottom: 1px solid rgba(255, 255, 255, .3);
+            }
+
+            header h1 {
+                display: inline;
+                margin: 0;
+                text-transform: uppercase;
+            }
+
+            header .username {
+                float: right;
+            }
+
+            main {
+                max-width: 900px;
+                margin: 48px auto;
+            }
+        </style>
+
+        <header>
+            <h1>substream</h1>
+            <span class="username">{{user.title}}</span>
+        </header>
 
         <app-location route="{{route}}"
                       use-hash-as-path></app-location>
@@ -40,6 +69,7 @@
 
             <stream-page route="{{route}}"
                          stream-id="{{streamData.id}}"
+                         all-streams="[[streams]]"
                          active="{{streamActive}}"></stream-page>
         </main>
 

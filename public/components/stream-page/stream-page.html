@@ -19,11 +19,23 @@
                 on-response="handleGetVideos"
                 debounce-duration="300"></iron-ajax>
 
-        <h1>stream <span>{{streamId}}</span></h1>
+        <h1>stream <span>{{streamName}}</span></h1>
 
         <div>
-            <template is="dom-repeat" items="{{videos}}">
-                <div>{{item.snippet.title}}</div>
+            <template is="dom-repeat" items="[[streamSubs]]">
+                <div>[[item.snippet.title]]</div>
+            </template>
+        </div>
+
+        <div>
+            <template is="dom-repeat" items="[[videos]]">
+                <div class="video-wrap">
+                    <!--<div class="video-thumbnail" data-src="{{item.snippet.thumbnails.default.url}}"></div>-->
+                    <img src="{{item.snippet.thumbnails.default.url}}" alt="">
+                    <span>{{item.snippet.title}}</span>
+                    <span>by <span>{{item.snippet.channelTitle}}</span></span>
+                    <!--[[item.snippet.title]]-->
+                </div>
             </template>
         </div>
 
@@ -32,17 +44,30 @@
         Polymer({
             is: "stream-page",
             properties: {
-                videos: Array,
                 active: {
                     type: Boolean,
                     value: false,
                     reflectToAttribute: true
-                }
+                },
+
             },
 
+            observers: [
+                'setStreamInfo(streamId)'
+            ],
+
             handleGetVideos: function(e) {
-                console.log(e.detail.response);
+//                console.log(e.detail.response);
                 this.videos = e.detail.response
+            },
+
+            setStreamInfo(streamId) {
+                for(var stream of this.allStreams) {
+                    if(stream.folderId == streamId) {
+                        this.streamName = stream.name;
+                        this.streamSubs = stream.subs;
+                    }
+                }
             },
 
             _computeUrl(streamId) {

@@ -3,5 +3,7 @@ html
         // Polyfill Web Components for older browsers
         script(src='/bower_components/webcomponentsjs/webcomponents-lite.min.js')
         link(rel="import" href="/components/substream-app/substream-app.html")
+        link(rel="stylesheet" href="/styles/site.css")
+        link(href='https://fonts.googleapis.com/css?family=Open+Sans:400,700', rel='stylesheet')
     body
         substream-app(user = JSON.stringify(user), subs = JSON.stringify(subs), streams = JSON.stringify(streams))

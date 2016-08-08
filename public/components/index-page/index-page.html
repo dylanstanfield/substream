@@ -6,15 +6,106 @@
             :host {
                 display: none;
             }
+
             :host([active]) {
                 display: block;
             }
+
+            h2 {
+                font-size: 16px;
+                font-weight: normal;
+                color: #999999;
+            }
+
+            .streams-wrap {
+                font-size: 0;
+            }
+
+            .stream {
+                background: rgba(255, 255, 255, .1);
+                box-sizing: border-box;
+                margin: 6px;
+                cursor: pointer;
+                padding: 0 16px;
+                width: 288px;
+                display: inline-block;
+            }
+
+            .stream:hover {
+                background: rgba(255, 255, 255, .2);
+            }
+
+            .stream .stream-name {
+                font-size: 14px;
+                line-height: 48px;
+            }
+
+            .stream .sub-thumbnails {
+                float: right;
+            }
+
+            .stream .sub-thumbnails img {
+                height: 24px;
+                margin: 12px 3px;
+                border-radius: 50%;
+                display: inline-block;
+                vertical-align: middle;
+            }
+
+            .stream .sub-thumbnails .more-subs {
+                font-size: 10px;
+                display: inline-block;
+                vertical-align: middle;
+                text-transform: uppercase;
+            }
+
+            .more-subs span {
+                font-size: 30px;
+                margin-left: 6px;
+            }
+
+            .add {
+                width: 48px;
+                height: 48px;
+                text-align: center;
+                border-radius: 50%;
+                position: relative;
+            }
+
+            .add span {
+                position: absolute;
+                line-height: 48px;
+                width: 48px;
+                display: block;
+                font-size: 30px;
+                top: 0;
+                left: 0;
+            }
         </style>
 
-        <h1>streams</h1>
-        <template is="dom-repeat" items="{{streams}}">
-            <div on-tap="redirectToStream" id="{{item.folderId}}">{{item.name}}</div>
-        </template>
+        <h2>My Streams</h2>
+        <div class="streams-wrap">
+            <template is="dom-repeat" items="{{streams}}">
+                <div class="stream" on-tap="redirectToStream">
+                    <span class="stream-name">{{item.name}}</span>
+
+                    <div class="sub-thumbnails">
+                        <template is="dom-repeat" items="{{item.subs}}">
+                            <template is="dom-if" if="{{_maxNumPreviews(index)}}">
+                                <img src="{{item.snippet.thumbnails.default.url}}" title="{{item.snippet.title}}" alt="{{item.snippet.title}}">
+                            </template>
+                        </template>
+
+                        <template is="dom-if" if="{{_hasMoreThanMaxPreview(item.subs.length)}}">
+                            <div class="more-subs">
+                                <span>&middot;&middot;&middot;</span>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </template>
+        </div>
+
     </template>
     <script>
         Polymer({
@@ -28,8 +119,20 @@
                 }
             },
 
-            redirectToStream: function(e) {
-                this.set('route.path', '/s/' + e.target.id);
+            redirectToStream: function() {
+                this.set('route.path', '/s/' + event.model.item.folderId);
+            },
+
+            _maxNumPreviews: function(i) {
+                return i < 3;
+            },
+
+            _hasMoreThanMaxPreview: function(i) {
+                return i > 3;
+            },
+
+            _computeNumPastMax: function(i) {
+                return i - 3;
             }
         });
     </script>
