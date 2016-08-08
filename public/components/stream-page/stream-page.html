@@ -1,5 +1,7 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 
+<link rel="import" href="/components/ss-channel/ss-channel.html">
+
 <dom-module id="stream-page">
     <template>
         <style>
@@ -8,6 +10,47 @@
             }
             :host([active]) {
                 display: block;
+            }
+
+            .videos-wrap {
+                font-size: 0;
+                margin: 48px 0;
+            }
+
+            .video {
+                display: inline-block;
+                width: 276px;
+                box-sizing: border-box;
+                margin: 12px;
+                padding: 12px;
+                border-radius: 2px;
+                background: rgba(255, 255, 255, 0.1);
+                cursor: pointer;
+            }
+
+            .video:hover {
+                background: rgba(255, 255, 255, .2);
+            }
+
+            .video img {
+                width: 100%;
+            }
+
+            .video span {
+                display: block;
+                font-size: 12px;
+            }
+
+            .video .video-title {
+                margin-top: 12px;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+
+            .video .video-channel {
+                margin-top: 6px;
+                color: #999999;
             }
         </style>
 
@@ -19,21 +62,22 @@
                 on-response="handleGetVideos"
                 debounce-duration="300"></iron-ajax>
 
-        <h1>stream <span>{{streamName}}</span></h1>
+        <h1>{{streamName}}</h1>
 
         <div>
             <template is="dom-repeat" items="[[streamSubs]]">
-                <div>[[item.snippet.title]]</div>
+                <ss-channel channel-title="[[item.snippet.title]]"
+                            thumbnail-url="[[item.snippet.thumbnails.default.url]]"></ss-channel>
             </template>
         </div>
 
-        <div>
+        <div class="videos-wrap">
             <template is="dom-repeat" items="[[videos]]">
-                <div class="video-wrap">
+                <div class="video">
                     <!--<div class="video-thumbnail" data-src="{{item.snippet.thumbnails.default.url}}"></div>-->
-                    <img src="{{item.snippet.thumbnails.default.url}}" alt="">
-                    <span>{{item.snippet.title}}</span>
-                    <span>by <span>{{item.snippet.channelTitle}}</span></span>
+                    <img src="{{item.snippet.thumbnails.medium.url}}" alt="">
+                    <span class="video-title">{{item.snippet.title}}</span>
+                    <span class="video-channel">{{item.snippet.channelTitle}}</span>
                     <!--[[item.snippet.title]]-->
                 </div>
             </template>
@@ -57,7 +101,7 @@
             ],
 
             handleGetVideos: function(e) {
-//                console.log(e.detail.response);
+                console.log(e.detail.response[0]);
                 this.videos = e.detail.response
             },
 

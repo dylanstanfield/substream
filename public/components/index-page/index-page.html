@@ -24,10 +24,10 @@
             .stream {
                 background: rgba(255, 255, 255, .1);
                 box-sizing: border-box;
-                margin: 6px;
+                margin: 12px;
                 cursor: pointer;
                 padding: 0 16px;
-                width: 288px;
+                width: 276px;
                 display: inline-block;
             }
 
@@ -64,26 +64,10 @@
                 margin-left: 6px;
             }
 
-            .add {
-                width: 48px;
-                height: 48px;
-                text-align: center;
-                border-radius: 50%;
-                position: relative;
-            }
-
-            .add span {
-                position: absolute;
-                line-height: 48px;
-                width: 48px;
-                display: block;
-                font-size: 30px;
-                top: 0;
-                left: 0;
-            }
         </style>
 
         <h2>My Streams</h2>
+
         <div class="streams-wrap">
             <template is="dom-repeat" items="{{streams}}">
                 <div class="stream" on-tap="redirectToStream">
@@ -104,6 +88,10 @@
                     </div>
                 </div>
             </template>
+
+            <div on-tap="redirectCreate" class="stream">
+                <span class="stream-name">Add Stream</span>
+            </div>
         </div>
 
     </template>
@@ -133,6 +121,10 @@
 
             _computeNumPastMax: function(i) {
                 return i - 3;
+            },
+
+            redirectCreate: function() {
+                this.set('route.path', '/create');
             }
         });
     </script>

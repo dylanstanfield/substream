@@ -1,0 +1,26 @@
+<link rel="import" href="/bower_components/polymer/polymer.html">
+
+<dom-module id="ss-channel">
+    <template>
+        <style>
+            :host{
+                display: inline-block;
+            }
+
+            img {
+                height: 36px;
+                border-radius: 50%;
+                margin: 6px;
+            }
+        </style>
+        <img src="{{thumbnail-url}}" title="{{channelTitle}}">
+    </template>
+    <script>
+        Polymer({
+            is: "ss-channel",
+            properties: {
+
+            }
+        });
+    </script>
+</dom-module>
