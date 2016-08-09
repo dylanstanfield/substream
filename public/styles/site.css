@@ -4,3 +4,7 @@ html, body {
     color: #ffffff;
     font-family: 'Open Sans', sans-serif;
 }
+
+* {
+    box-sizing: border-box;
+}

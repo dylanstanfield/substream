@@ -1,37 +1,136 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
 <link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
 
+<link rel="import" href="/components/ss-channel/ss-channel.html">
+
 <dom-module id="create-page">
     <template>
         <style>
             :host {
                 display: none;
+                position: absolute;
+                left: 396px;
+                top: 73px;
+                right: 48px;
             }
             :host([active]) {
                 display: block;
             }
 
-            .selected {
-                background: #999999;
+            h1 {
+                font-size: 12px;
+                line-height: 24px;
+                margin: 12px 0;
+                font-weight: normal;
+                text-transform: uppercase;
             }
+
+            .name-input-wrap {
+                margin-bottom: 24px;
+            }
+
+            label {
+                display: block;
+                font-size: 12px;
+                line-height: 24px;
+                margin-bottom: 12px;
+                text-transform: uppercase;
+                color: #999999;
+            }
+
+            .name-input-wrap input {
+                font-family: 'Open Sans', sans-serif;
+                border: none;
+                background: rgba(255, 255, 255, .2);
+                line-height: 40px;
+                border-radius: 2px;
+                width: 100%;
+                max-width: 400px;
+                text-indent: 16px;
+                font-size: 14px;
+                color: #ffffff;
+            }
+
+            .select-streams-wrap {
+                margin-bottom: 24px;
+            }
+
+            .select-streams-wrap .channel {
+                font-size: 14px;
+                display: inline-block;
+                width: 32.2%;
+                text-align: left;
+                padding: 8px 12px;
+                background: rgba(255, 255, 255, .1);
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                border-radius: 2px;
+                margin: 3px;
+                cursor: pointer;
+            }
+
+            .select-streams-wrap .channel:hover {
+                background: rgba(255, 255, 255, .2);
+            }
+
+            .select-streams-wrap .channel span {
+                line-height: 30px;
+                padding: 0 9px;
+                pointer-events: none;
+            }
+
+            .select-streams-wrap .channel ss-channel {
+                float: left;
+                pointer-events: none;
+            }
+
+            .select-streams-wrap .channel.selected {
+                background: rgba(92, 255, 184, 0.3);
+            }
+
+            .create-btn-wrap {
+                text-align: right;
+                margin-bottom: 48px;
+            }
+
+            .create-btn-wrap .create-btn {
+                line-height: 40px;
+                padding: 0 16px;
+                font-size: 14px;
+                border: none;
+                background: rgba(255, 255, 255, .1);
+                color: #ffffff;
+                cursor: pointer;
+                border-radius: 2px;
+            }
+
+            .create-btn-wrap .create-btn:hover {
+                background: rgba(255, 255, 255, .2);
+            }
+
         </style>
 
-        <h1>create stream</h1>
+        <h1>Add A Stream</h1>
 
-        <div>
+        <div class="name-input-wrap">
             <label>Stream name</label>
-            <input type="text" id="streamName" />
+            <input type="text" id="streamName" placeholder="Name your stream..." />
         </div>
 
-        <div>
+        <div class="select-streams-wrap">
             <label>Select your subscriptions</label>
             <template is="dom-repeat" items="{{subs}}">
-                <div on-tap="selectStream" id="{{item.snippet.resourceId.channelId}}">{{item.snippet.title}}</div>
+                <div class="channel" on-tap="selectStream" id="{{item.snippet.resourceId.channelId}}">
+                    <ss-channel channel-title="[[item.snippet.title]]"
+                                thumbnail-url="[[item.snippet.thumbnails.default.url]]"></ss-channel>
+                    <span>{{item.snippet.title}}</span>
+                </div>
             </template>
         </div>
 
-        <div>
-            <button on-tap="createStream">Create Stream</button>
+        <div class="create-btn-wrap">
+            <button class="create-btn" on-tap="createStream">Create Stream</button>
         </div>
 
         <iron-ajax

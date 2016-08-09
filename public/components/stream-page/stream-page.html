@@ -8,9 +8,9 @@
             :host {
                 display: none;
                 position: absolute;
-                left: 324px;
-                top: 0;
-                right: 0;
+                left: 396px;
+                top: 73px;
+                right: 48px;
             }
 
             :host([active]) {
@@ -19,9 +19,16 @@
 
             h1 {
                 font-weight: normal;
-                font-size: 12px;
+                font-size: 24px;
+            }
+
+            .channels-label {
                 text-transform: uppercase;
-                display: inline-block;
+                color: #999999;
+                font-size: 12px;
+                line-height: 24px;
+                display: block;
+                margin: 12px 0;
             }
 
             #loading {
@@ -36,6 +43,13 @@
                 font-size: 0;
                 margin: 12px auto;
 
+            }
+
+            .videos-wrap label {
+                font-size: 12px;
+                text-transform: uppercase;
+                display: block;
+                margin: 12px 0;
             }
 
             .video {
@@ -87,8 +101,9 @@
                 on-response="handleGetVideos"
                 debounce-duration="300"></iron-ajax>
 
-        <h1>{{streamName}}</h1>
+        <!--<h1>{{streamName}}</h1>-->
 
+        <label class="channels-label">Channels</label>
         <div>
             <template is="dom-repeat" items="[[streamSubs]]">
                 <ss-channel channel-title="[[item.snippet.title]]"
@@ -98,7 +113,9 @@
 
         <div id="loading">Loading...</div>
 
+
         <div class="videos-wrap" id="videosWrap">
+            <label>Videos</label>
             <template is="dom-repeat" items="[[videos]]">
                 <div class="video">
                     <img src="{{item.snippet.thumbnails.medium.url}}" alt="">
@@ -127,7 +144,6 @@
             ],
 
             handleGetVideos: function(e) {
-                console.log(e.detail.response[0]);
                 this.videos = e.detail.response
             },
 

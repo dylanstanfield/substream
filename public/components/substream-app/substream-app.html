@@ -12,18 +12,24 @@
         <style>
             :host {
                 display: block;
-                margin: 0 48px;
+                /*margin: 0 48px;*/
                 height: 100%;
             }
 
             header {
-                padding: 0 24px;
-                line-height: 96px;
+                position: fixed;
+                z-index: 1000;
+                width: 100%;
+                background: #272727;
+
+                padding: 0 48px;
+                line-height: 72px;
                 border-bottom: 1px solid rgba(255, 255, 255, .3);
             }
 
             header h1 {
                 display: inline;
+                font-size: 24px;
                 margin: 0;
                 text-transform: uppercase;
             }
@@ -33,9 +39,7 @@
             }
 
             main {
-                /*max-width: 960px;*/
-                /*margin: 48px auto;*/
-                position: relative;
+                padding-top: 97px;
             }
         </style>
 
@@ -57,7 +61,7 @@
                    active="{{streamActive}}"></app-route>
 
         <app-route route="{{route}}"
-                   pattern="/create"
+                   pattern="/add"
                    active="{{createActive}}"></app-route>
 
         <main>

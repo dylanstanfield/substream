@@ -5,38 +5,71 @@
         <style>
             :host {
                 display: block;
-                position: absolute;
-                left: 0;
-                top: 0;
                 width: 300px;
+                position: fixed;
+                top: 73px;
+                left: 48px;
             }
 
-            h2 {
+            .streams-header {
+                position: relative;
+                margin: 12px 0;
+                line-height: 24px;
+            }
+
+            .streams-header h2 {
                 font-size: 12px;
                 font-weight: normal;
                 text-transform: uppercase;
                 color: #999999;
             }
 
+            .streams-header .create-btn {
+                font-size: 12px;
+                color: #ffffff;
+                text-decoration: none;
+                position: absolute;
+                right: 0;
+                bottom: 0;
+                text-transform: uppercase;
+            }
+
             .stream {
                 background: rgba(255, 255, 255, .1);
                 box-sizing: border-box;
+                border-radius: 2px;
                 margin: 12px 0;
                 cursor: pointer;
                 padding: 0 16px;
+                transition: left 200ms ease;
+                left: 0;
+                position: relative;
             }
 
             .stream:hover {
+                left: 6px;
                 background: rgba(255, 255, 255, .2);
+            }
+
+            .stream.active {
+                border-left: 3px solid #ffffff;
+            }
+
+            .stream.active:hover {
+                left: 0;
+                background: rgba(255, 255, 255, .1);
+                cursor: auto;
             }
 
             .stream .stream-name {
                 font-size: 14px;
                 line-height: 48px;
+                pointer-events: none;
             }
 
             .stream .sub-thumbnails {
                 float: right;
+                pointer-events: none;
             }
 
             .stream .sub-thumbnails img {
@@ -48,19 +81,20 @@
             }
 
         </style>
+        <div class="streams-header">
+            <h2>My Streams</h2>
+            <a class="create-btn" href="#/add">+ Add</a>
+        </div>
 
-        <h2>My Streams</h2>
 
         <div class="streams-wrap" id="streamsWrap">
             <template is="dom-repeat" items="{{streams}}">
-                <div class="stream" on-tap="redirectToStream">
+                <div class="stream" on-tap="redirectToStream" id="{{item.folderId}}">
                     <span class="stream-name">{{item.name}}</span>
 
                     <div class="sub-thumbnails">
-                        <template is="dom-repeat" items="{{item.subs}}">
-                            <template is="dom-if" if="{{_maxNumPreviews(index)}}">
-                                <img src="{{item.snippet.thumbnails.default.url}}" title="{{item.snippet.title}}" alt="{{item.snippet.title}}">
-                            </template>
+                        <template is="dom-repeat" items="{{_getAFew(item.subs)}}">
+                            <img src="{{item.snippet.thumbnails.default.url}}" title="{{item.snippet.title}}" alt="{{item.snippet.title}}">
                         </template>
                     </div>
                 </div>
@@ -81,23 +115,21 @@
             },
 
             redirectToStream: function() {
+                var oldActive = this.$$('.active');
+                if(oldActive) oldActive.classList.remove('active');
+
+                event.target.classList.add('active');
                 window.location.href = '#/s/' + event.model.item.folderId;
             },
 
-            _maxNumPreviews: function(i) {
-                return i < 3;
-            },
+            _getAFew: function(array) {
+                var aFew = [];
 
-            _hasMoreThanMaxPreview: function(i) {
-                return i > 3;
-            },
+                for(var i = 0; i < 3; i++) {
+                    aFew.push(array[i]);
+                }
 
-            _computeNumPastMax: function(i) {
-                return i - 3;
-            },
-
-            redirectCreate: function() {
-                this.set('route.path', '/create');
+                return aFew;
             }
         });
     </script>
