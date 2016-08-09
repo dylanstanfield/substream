@@ -38,27 +38,34 @@
                 color: #999999;
             }
 
-            .name-input-wrap input {
+            input {
                 font-family: 'Open Sans', sans-serif;
+                display: block;
+                margin: 6px;
                 border: none;
                 background: rgba(255, 255, 255, .2);
                 line-height: 40px;
                 border-radius: 2px;
                 width: 100%;
                 max-width: 400px;
-                text-indent: 16px;
+                padding: 0 16px;
                 font-size: 14px;
                 color: #ffffff;
             }
 
             .select-streams-wrap {
-                margin-bottom: 24px;
+                margin-bottom: 96px;
+                font-size: 0;
+            }
+
+            .channel-wrap {
+                padding: 6px;
+                display: inline-block;
+                width: 33.333%;
             }
 
             .select-streams-wrap .channel {
                 font-size: 14px;
-                display: inline-block;
-                width: 32.2%;
                 text-align: left;
                 padding: 8px 12px;
                 background: rgba(255, 255, 255, .1);
@@ -66,7 +73,6 @@
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 border-radius: 2px;
-                margin: 3px;
                 cursor: pointer;
             }
 
@@ -86,32 +92,31 @@
             }
 
             .select-streams-wrap .channel.selected {
-                background: rgba(92, 255, 184, 0.3);
+                background: rgba(114, 255, 61, 0.3);
             }
 
-            .create-btn-wrap {
-                text-align: right;
-                margin-bottom: 48px;
-            }
-
-            .create-btn-wrap .create-btn {
+            .create-btn {
+                float: right;
                 line-height: 40px;
                 padding: 0 16px;
                 font-size: 14px;
-                border: none;
-                background: rgba(255, 255, 255, .1);
+                border: 1px solid #ffffff;
+                background: transparent;
                 color: #ffffff;
                 cursor: pointer;
                 border-radius: 2px;
+                margin: 6px;
             }
 
-            .create-btn-wrap .create-btn:hover {
+            .create-btn:hover {
                 background: rgba(255, 255, 255, .2);
             }
 
         </style>
 
         <h1>Add A Stream</h1>
+        <button class="create-btn" on-tap="createStream">Create Stream</button>
+
 
         <div class="name-input-wrap">
             <label>Stream name</label>
@@ -120,17 +125,20 @@
 
         <div class="select-streams-wrap">
             <label>Select your subscriptions</label>
-            <template is="dom-repeat" items="{{subs}}">
-                <div class="channel" on-tap="selectStream" id="{{item.snippet.resourceId.channelId}}">
-                    <ss-channel channel-title="[[item.snippet.title]]"
-                                thumbnail-url="[[item.snippet.thumbnails.default.url]]"></ss-channel>
-                    <span>{{item.snippet.title}}</span>
+            <input class="quick-filter" type="search" placeholder="Quick filter..." value="{{searchString::input}}">
+
+            <template is="dom-repeat" items="{{subs}}" filter="{{_computeFilter(searchString)}}">
+                <div class="channel-wrap">
+                    <div class$="channel {{item.classList}}" on-tap="_selectChannel" id="{{item.snippet.resourceId.channelId}}">
+                        <ss-channel channel-title="[[item.snippet.title]]"
+                                    thumbnail-url="[[item.snippet.thumbnails.default.url]]"></ss-channel>
+                        <span>{{item.snippet.title}}</span>
+                    </div>
                 </div>
             </template>
         </div>
 
         <div class="create-btn-wrap">
-            <button class="create-btn" on-tap="createStream">Create Stream</button>
         </div>
 
         <iron-ajax
@@ -159,14 +167,16 @@
                 }
             },
 
-            selectStream: function(e, detail) {
-                if(e.target.classList.contains("selected")) {
-                    e.target.classList.remove("selected");
-                    var i = this.selectedSubIds.indexOf(e.target.id);
-                    this.splice('selectedSubIds', i, 1);
+            _selectChannel() {
+                var i = this.subs.indexOf(event.model.item);
+                var model = event.model;
+
+                if(model.item.selected == true) {
+                    this.set('subs.' + i + '.classList', "");
+                    this.set('subs.' + i + '.selected', false);
                 } else {
-                    e.target.classList.add("selected");
-                    this.push('selectedSubIds', e.target.id);
+                    this.set('subs.' + i + '.classList', "selected");
+                    this.set('subs.' + i + '.selected', true);
                 }
             },
 
@@ -182,8 +192,21 @@
             },
 
             handleCreateStream: function(e) {
-                console.log(e.detail.response);
                 this.set('route.path', '/');
+            },
+
+            _computeFilter: function(searchTerm) {
+                if (!searchTerm) {
+                    // set filter to null to disable filtering
+                    return null;
+                } else {
+                    // return a filter function for the current search string
+                    searchTerm = searchTerm.toLowerCase();
+                    return function(channel) {
+                        var title = channel.snippet.title.toLowerCase();
+                        return (title.indexOf(searchTerm) != -1);
+                    };
+                }
             }
         });
     </script>

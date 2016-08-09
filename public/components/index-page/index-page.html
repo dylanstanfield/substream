@@ -88,12 +88,14 @@
         </style>
         <div class="streams-header">
             <h2>My Streams</h2>
-            <a class="create-btn" href="#/add">+ New Stream</a>
+            <template is="dom-if" if="{{!activeAdd}}">
+                <a class="create-btn" href="#/add">+ New Stream</a>
+            </template>
         </div>
 
 
         <div class="streams-wrap" id="streamsWrap">
-            <template id="streamList" is="dom-repeat" items="{{streams}}" observe="classList item.classList">
+            <template id="streamList" is="dom-repeat" items="{{streams}}">
                 <div class$="stream {{item.classList}}" on-tap="redirectToStream" id="{{item.folderId}}">
                     <span class="stream-name">{{item.name}}</span>
 
@@ -125,12 +127,6 @@
 
             redirectToStream() {
                 window.location.href = '#/s/' + event.model.item.folderId;
-
-                for(var i in this.streams) {
-
-                    if(this.streams[i].folderId == event.model.item.folderId) this.set('stream.' + i + '.classList', " active");
-                    else this.set('stream' + i + '.classList', "");
-                }
             },
 
             _activeStreamChanged(activeStreamId, activeAdd) {

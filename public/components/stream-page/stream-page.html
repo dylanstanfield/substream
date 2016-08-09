@@ -39,14 +39,13 @@
             }
 
             #loading paper-spinner-lite {
-                --paper-spinner-color: #999999;
-                --paper-spinner-stroke-width: 6px;
+                --paper-spinner-color: #ffffff;
+                --paper-spinner-stroke-width: 2px;
             }
 
             .videos-wrap {
                 font-size: 0;
-                margin: 12px auto 96px;
-
+                padding: 12px auto 96px;
             }
 
             label {
@@ -56,11 +55,13 @@
                 margin: 12px 0;
             }
 
-            .video {
+            .video-wrap {
                 display: inline-block;
-                width: 30%;
-                box-sizing: border-box;
-                margin: 6px;
+                width: 33.333%;
+                padding: 6px;
+            }
+
+            .video {
                 padding: 12px;
                 border-radius: 2px;
                 background: rgba(255, 255, 255, 0.1);
@@ -124,10 +125,12 @@
 
         <div class="videos-wrap" id="videosWrap">
             <template is="dom-repeat" items="[[videos]]">
-                <div on-tap="sendToVideo" class="video">
-                    <img src="{{item.snippet.thumbnails.medium.url}}" alt="">
-                    <span class="video-title">{{item.snippet.title}}</span>
-                    <span class="video-channel">{{item.snippet.channelTitle}}</span>
+                <div class="video-wrap">
+                    <div on-tap="sendToVideo" class="video">
+                        <img src="{{item.snippet.thumbnails.medium.url}}" alt="">
+                        <span class="video-title">{{item.snippet.title}}</span>
+                        <span class="video-channel">{{item.snippet.channelTitle}}</span>
+                    </div>
                 </div>
             </template>
         </div>
