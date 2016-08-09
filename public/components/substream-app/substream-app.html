@@ -12,7 +12,6 @@
         <style>
             :host {
                 display: block;
-                /*margin: 0 48px;*/
                 height: 100%;
             }
 
@@ -92,7 +91,8 @@
 
             attached: function() {
                 if(!this.route.path) {
-                    this.set('route.path', '/');
+                    if(this.streams[0]) this.set('route.path', '/s/' + this.streams[0].folderId);
+                    else this.set('route.path', '/add')
                 }
             }
         });
