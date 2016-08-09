@@ -1,4 +1,5 @@
 <link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="/bower_components/paper-spinner/paper-spinner-lite.html">
 
 <link rel="import" href="/components/ss-channel/ss-channel.html">
 
@@ -34,18 +35,21 @@
             #loading {
                 display: none;
                 text-align: center;
-                font-size: 24px;
-                color: #999999;
                 padding-top: 48px;
+            }
+
+            #loading paper-spinner-lite {
+                --paper-spinner-color: #999999;
+                --paper-spinner-stroke-width: 6px;
             }
 
             .videos-wrap {
                 font-size: 0;
-                margin: 12px auto;
+                margin: 12px auto 96px;
 
             }
 
-            .videos-wrap label {
+            label {
                 font-size: 12px;
                 text-transform: uppercase;
                 display: block;
@@ -69,6 +73,7 @@
 
             .video img {
                 width: 100%;
+                border-radius: 2px;
             }
 
             .video span {
@@ -101,8 +106,6 @@
                 on-response="handleGetVideos"
                 debounce-duration="300"></iron-ajax>
 
-        <!--<h1>{{streamName}}</h1>-->
-
         <label class="channels-label">Channels</label>
         <div>
             <template is="dom-repeat" items="[[streamSubs]]">
@@ -111,11 +114,15 @@
             </template>
         </div>
 
-        <div id="loading">Loading...</div>
 
+
+        <label>Videos</label>
+
+        <div id="loading">
+            <paper-spinner-lite active></paper-spinner-lite>
+        </div>
 
         <div class="videos-wrap" id="videosWrap">
-            <label>Videos</label>
             <template is="dom-repeat" items="[[videos]]">
                 <div on-tap="sendToVideo" class="video">
                     <img src="{{item.snippet.thumbnails.medium.url}}" alt="">

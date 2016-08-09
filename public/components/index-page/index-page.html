@@ -32,6 +32,11 @@
                 right: 0;
                 bottom: 0;
                 text-transform: uppercase;
+                transition: all 200ms ease;
+            }
+
+            .streams-header .create-btn:hover {
+                color: #999999;
             }
 
             .stream {
@@ -83,13 +88,13 @@
         </style>
         <div class="streams-header">
             <h2>My Streams</h2>
-            <a class="create-btn" href="#/add">+ Add</a>
+            <a class="create-btn" href="#/add">+ New Stream</a>
         </div>
 
 
         <div class="streams-wrap" id="streamsWrap">
-            <template is="dom-repeat" items="{{streams}}">
-                <div class="stream" on-tap="redirectToStream" id="{{item.folderId}}">
+            <template id="streamList" is="dom-repeat" items="{{streams}}" observe="classList item.classList">
+                <div class$="stream {{item.classList}}" on-tap="redirectToStream" id="{{item.folderId}}">
                     <span class="stream-name">{{item.name}}</span>
 
                     <div class="sub-thumbnails">
@@ -114,15 +119,28 @@
                 }
             },
 
-            redirectToStream: function() {
-                var oldActive = this.$$('.active');
-                if(oldActive) oldActive.classList.remove('active');
+            observers: [
+                '_activeStreamChanged(activeStreamId, activeAdd)'
+            ],
 
-                event.target.classList.add('active');
+            redirectToStream() {
                 window.location.href = '#/s/' + event.model.item.folderId;
+
+                for(var i in this.streams) {
+
+                    if(this.streams[i].folderId == event.model.item.folderId) this.set('stream.' + i + '.classList', " active");
+                    else this.set('stream' + i + '.classList', "");
+                }
             },
 
-            _getAFew: function(array) {
+            _activeStreamChanged(activeStreamId, activeAdd) {
+                for(var i in this.streams) {
+                    if(this.streams[i].folderId == activeStreamId && !activeAdd) this.set('streams.' + i + '.classList', " active");
+                    else this.set('streams.' + i + '.classList', "");
+                }
+            },
+
+            _getAFew(array) {
                 var aFew = [];
 
                 for(var i = 0; i < 3; i++) {
