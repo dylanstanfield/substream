@@ -117,7 +117,7 @@
         <div class="videos-wrap" id="videosWrap">
             <label>Videos</label>
             <template is="dom-repeat" items="[[videos]]">
-                <div class="video">
+                <div on-tap="sendToVideo" class="video">
                     <img src="{{item.snippet.thumbnails.medium.url}}" alt="">
                     <span class="video-title">{{item.snippet.title}}</span>
                     <span class="video-channel">{{item.snippet.channelTitle}}</span>
@@ -168,6 +168,10 @@
 
             _computeUrl(streamId) {
                 return '/api/streams/' + streamId + '/videos'
+            },
+
+            sendToVideo() {
+                window.location.href = 'https://www.youtube.com/watch?v=' + event.model.item.id.videoId;
             }
         });
     </script>
