@@ -30,10 +30,10 @@ router.post('/', function(req, res, next) {
 /**
  * Delete a user's stream
  */
-router.delete('/', function(req, res, next) {
+router.delete('/:id', function(req, res, next) {
     logger.info(`Request to delete stream...`);
 
-    StreamsController.deleteStream(req.session.user, req.body.folderId).then(() => {
+    StreamsController.deleteStream(req.session.user, req.params.id).then(() => {
         logger.debug(`Request to delete stream was successful`);
         res.sendStatus(200); // Success
     }).catch(err => {

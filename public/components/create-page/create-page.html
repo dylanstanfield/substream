@@ -17,45 +17,28 @@
                 display: block;
             }
 
-            h1 {
-                font-size: 12px;
-                line-height: 24px;
-                margin: 12px 0;
-                font-weight: normal;
-                text-transform: uppercase;
+            header {
+                position: relative;
+                margin: 12px 0 0;
             }
 
             .name-input-wrap {
-                margin-bottom: 24px;
-            }
-
-            label {
-                display: block;
-                font-size: 12px;
-                line-height: 24px;
-                margin-bottom: 12px;
-                text-transform: uppercase;
-                color: #999999;
-            }
-
-            input {
-                font-family: 'Open Sans', sans-serif;
-                display: block;
-                margin: 6px;
-                border: none;
-                background: rgba(255, 255, 255, .2);
-                line-height: 40px;
-                border-radius: 2px;
-                width: 100%;
-                max-width: 400px;
-                padding: 0 16px;
-                font-size: 14px;
-                color: #ffffff;
+                margin: 12px 0 24px;
             }
 
             .select-streams-wrap {
                 margin-bottom: 96px;
                 font-size: 0;
+            }
+
+            .quick-filter-wrap {
+                padding: 0 6px 6px;
+            }
+
+            .quick-filter {
+                max-width: none;
+                position: relative;
+                left: -6px;
             }
 
             .channel-wrap {
@@ -92,30 +75,36 @@
             }
 
             .select-streams-wrap .channel.selected {
-                background: rgba(114, 255, 61, 0.3);
+                background: rgba(145, 255, 158, 0.3);
             }
 
             .create-btn {
-                float: right;
                 line-height: 40px;
+                position: absolute;
+                top: 0;
+                right: 0;
                 padding: 0 16px;
-                font-size: 14px;
-                border: 1px solid #ffffff;
-                background: transparent;
+                font-size: 12px;
+                text-transform: uppercase;
+                background: rgba(145, 255, 158, 0.3);
                 color: #ffffff;
+                border: none;
                 cursor: pointer;
                 border-radius: 2px;
                 margin: 6px;
             }
 
             .create-btn:hover {
-                background: rgba(255, 255, 255, .2);
+                background: rgba(145, 255, 158, 0.5);
             }
 
         </style>
 
-        <h1>Add A Stream</h1>
-        <button class="create-btn" on-tap="createStream">Create Stream</button>
+        <header>
+            <h1>Add A Stream</h1>
+            <button class="create-btn" on-tap="createStream">Create Stream</button>
+        </header>
+
 
 
         <div class="name-input-wrap">
@@ -125,11 +114,14 @@
 
         <div class="select-streams-wrap">
             <label>Select your subscriptions</label>
-            <input class="quick-filter" type="search" placeholder="Quick filter..." value="{{searchString::input}}">
+
+            <div class="quick-filter-wrap">
+                <input class="quick-filter" type="search" placeholder="Quick filter..." value="{{searchString::input}}">
+            </div>
 
             <template is="dom-repeat" items="{{subs}}" filter="{{_computeFilter(searchString)}}">
                 <div class="channel-wrap">
-                    <div class$="channel {{item.classList}}" on-tap="_selectChannel" id="{{item.snippet.resourceId.channelId}}">
+                    <div class$="channel {{item.classList}}" on-tap="_selectChannel">
                         <ss-channel channel-title="[[item.snippet.title]]"
                                     thumbnail-url="[[item.snippet.thumbnails.default.url]]"></ss-channel>
                         <span>{{item.snippet.title}}</span>
@@ -156,10 +148,6 @@
             is: "create-page",
             properties: {
                 subs: Array,
-                selectedSubIds: {
-                    type: Array,
-                    value: []
-                },
                 active: {
                     type: Boolean,
                     value: false,
@@ -183,16 +171,23 @@
             createStream: function() {
                 var req = this.$.createRequest;
 
+                var subIds = [];
+
+                for(var sub of this.subs) {
+                    if(sub.selected) subIds.push(sub.snippet.resourceId.channelId);
+                }
+
                 req.body = {
-                    subIds: this.selectedSubIds,
+                    subIds: subIds,
                     name: this.$.streamName.value
                 };
 
                 req.generateRequest();
             },
 
-            handleCreateStream: function(e) {
-                this.set('route.path', '/');
+            handleCreateStream: function(e, detail) {
+                window.location.href = '/#/s/' + detail.response;
+                window.location.reload();
             },
 
             _computeFilter: function(searchTerm) {

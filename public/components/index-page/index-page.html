@@ -24,21 +24,6 @@
                 color: #999999;
             }
 
-            .streams-header .create-btn {
-                font-size: 12px;
-                color: #ffffff;
-                text-decoration: none;
-                position: absolute;
-                right: 0;
-                bottom: 0;
-                text-transform: uppercase;
-                transition: all 200ms ease;
-            }
-
-            .streams-header .create-btn:hover {
-                color: #999999;
-            }
-
             .stream {
                 background: rgba(255, 255, 255, .1);
                 box-sizing: border-box;
@@ -89,7 +74,7 @@
         <div class="streams-header">
             <h2>My Streams</h2>
             <template is="dom-if" if="{{!activeAdd}}">
-                <a class="create-btn" href="#/add">+ New Stream</a>
+                <a class="button" href="#/add">+ New Stream</a>
             </template>
         </div>
 

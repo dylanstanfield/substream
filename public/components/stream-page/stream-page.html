@@ -18,9 +18,15 @@
                 display: block;
             }
 
-            h1 {
-                font-weight: normal;
-                font-size: 24px;
+            header {
+                margin: 12px 0 0;
+                position: relative;
+            }
+
+            header .modify-btn {
+                position: absolute;
+                top: 0;
+                right: 0;
             }
 
             .channels-label {
@@ -99,24 +105,35 @@
         </style>
 
         <iron-ajax
+                id="deleteRequest"
+                url="[[_computeDeleteUrl(streamId)]]"
+                method="DELETE"
+                on-response="handleDelete"
+                debounce-duration="300"></iron-ajax>
+
+        <iron-ajax
                 auto
-                url="[[_computeUrl(streamId)]]"
+                url="[[_computeGetVideosUrl(streamId)]]"
                 method="GET"
                 handle-as="json"
                 loading="{{isLoading}}"
                 on-response="handleGetVideos"
                 debounce-duration="300"></iron-ajax>
 
-        <label class="channels-label">Channels</label>
+        <header>
+            <h1>{{streamName}}</h1>
+            <a on-tap="_deleteStream" class="button">Delete Stream</a>
+        </header>
+
+
+        <label>Channels</label>
         <div>
             <template is="dom-repeat" items="[[streamSubs]]">
                 <ss-channel channel-title="[[item.snippet.title]]"
                             thumbnail-url="[[item.snippet.thumbnails.default.url]]"></ss-channel>
             </template>
         </div>
-
-
-
+        
         <label>Videos</label>
 
         <div id="loading">
@@ -140,6 +157,7 @@
         Polymer({
             is: "stream-page",
             properties: {
+                streamId: String,
                 active: {
                     type: Boolean,
                     value: false,
@@ -155,6 +173,10 @@
 
             handleGetVideos: function(e) {
                 this.videos = e.detail.response
+            },
+
+            handleDelete(e) {
+                window.location.href = '/';
             },
 
             setStreamInfo(streamId) {
@@ -176,8 +198,16 @@
                 }
             },
 
-            _computeUrl(streamId) {
+            _computeGetVideosUrl(streamId) {
                 return '/api/streams/' + streamId + '/videos'
+            },
+
+            _computeDeleteUrl(streamId) {
+                return '/api/streams/' + streamId;
+            },
+
+            _deleteStream() {
+                this.$.deleteRequest.generateRequest();
             },
 
             sendToVideo() {
