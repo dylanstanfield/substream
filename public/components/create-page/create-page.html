@@ -27,9 +27,18 @@
                 margin: 12px 0 24px;
             }
 
-            .select-streams-wrap {
+            .select-channels-wrap {
                 margin-bottom: 96px;
                 font-size: 0;
+                position: relative;
+                top: 48px;
+                opacity: 0;
+            }
+
+            .select-channels-wrap.show {
+                opacity: 1;
+                top: 0;
+                transition: all 500ms ease;
             }
 
             .quick-filter-wrap {
@@ -48,7 +57,7 @@
                 width: 33.333%;
             }
 
-            .select-streams-wrap .channel {
+            .select-channels-wrap .channel {
                 font-size: 14px;
                 text-align: left;
                 padding: 8px 12px;
@@ -60,22 +69,22 @@
                 cursor: pointer;
             }
 
-            .select-streams-wrap .channel:hover {
+            .select-channels-wrap .channel:hover {
                 background: rgba(255, 255, 255, .2);
             }
 
-            .select-streams-wrap .channel span {
+            .select-channels-wrap .channel span {
                 line-height: 30px;
                 padding: 0 9px;
                 pointer-events: none;
             }
 
-            .select-streams-wrap .channel ss-channel {
+            .select-channels-wrap .channel ss-channel {
                 float: left;
                 pointer-events: none;
             }
 
-            .select-streams-wrap .channel.selected {
+            .select-channels-wrap .channel.selected {
                 background: rgba(145, 255, 158, 0.3);
             }
 
@@ -103,7 +112,7 @@
 
         <header>
             <h1>Add A Stream</h1>
-            <button class="create-btn" on-tap="createStream">Create Stream</button>
+            <button class="create-btn" on-tap="_createStream">Create Stream</button>
         </header>
 
         <div class="name-input-wrap">
@@ -111,7 +120,7 @@
             <input type="text" id="streamName" placeholder="Name your stream..." />
         </div>
 
-        <div class="select-streams-wrap">
+        <div class="select-channels-wrap" id="selectChannelsWrap">
             <label>Select your subscriptions</label>
 
             <div class="quick-filter-wrap">
@@ -135,7 +144,7 @@
                 method="POST"
                 content-type="application/json"
                 handle-as="json"
-                on-response="handleCreateStream"
+                on-response="_handleCreateStream"
                 debounce-duration="300"></iron-ajax>
 
     </template>
@@ -151,6 +160,10 @@
                 }
             },
 
+            observers: [
+                '_isActive(active)'
+            ],
+
             _selectChannel() {
                 var i = this.subs.indexOf(event.model.item);
                 var model = event.model;
@@ -164,7 +177,7 @@
                 }
             },
 
-            createStream: function() {
+            _createStream: function() {
                 var req = this.$.createRequest;
 
                 var subIds = [];
@@ -181,7 +194,17 @@
                 req.generateRequest();
             },
 
-            handleCreateStream: function(e, detail) {
+            _isActive(active) {
+                if(!active) this.$.selectChannelsWrap.classList.remove('show');
+                else {
+                    var self = this;
+                    setTimeout(function() {
+                        self.$.selectChannelsWrap.classList.add('show');
+                    }, 100);
+                }
+            },
+
+            _handleCreateStream: function(e, detail) {
                 window.location.href = '/#/s/' + detail.response;
                 window.location.reload();
             },
