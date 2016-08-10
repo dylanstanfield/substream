@@ -1,5 +1,12 @@
 # substream
-Trying to create a better way to manage your YouTube subscriptions.
+Organize your YouTube subscriptions into streams. Browse videos easier.
+
+## How does it work?
+Using the YouTube Data and Google Drive API we can show a user the channels they are subscribed to. When they request a grouping (or stream) we store it in a configuration file on the user's Google Drive. Then, when a user browses to a stream we can read their config and pull in recent videos from all the channels in the group.
+
+## Technology
+- Polymer (Client side SPA)
+- Express/Node (Communicates to YouTube and Google Drive, sends data to client, manages sessions)
 
 ## Configuration
 To get this thing running you'll need to create a [Google APIs project](https://console.developers.google.com/apis/dashboard).
