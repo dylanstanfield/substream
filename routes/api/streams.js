@@ -48,8 +48,7 @@ router.get('/', function(req, res, next) {
     logger.info(`Request to get all stream...`);
 
     StreamsController.getAllSubs(req.session.user).then(subs => {
-        return StreamsController.getAllStreams(req.session.user, subs);
-    }).then(streams => {
+        let streams = StreamsController.getAllStreams(req.session.user, subs);
         logger.debug(`Request to get all streams was successful`);
         res.json(streams);
     }).catch(err => {
@@ -64,8 +63,7 @@ router.get('/:id', function(req, res, next) {
     logger.info(`Request to get stream...`);
 
     StreamsController.getAllSubs(req.session.user).then(subs => {
-        return StreamsController.getStream(req.session.user, subs, req.params.id);
-    }).then(stream => {
+        let stream = StreamsController.getStream(req.session.user, subs, req.params.id);
         logger.debug(`Request to get stream was successful`);
         res.json(stream);
     }).catch(err => {

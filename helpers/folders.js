@@ -12,28 +12,25 @@ class FoldersHelper {
      * Builds folderVMs by mapping folders and its subIds to subs
      * @param subs
      * @param configData
-     * @returns {Promise}
+     * @returns {FolderVM[]}
      */
     static buildFolderVMs(subs, configData) {
         let folders = configData.folders;
         let folderVMs = [];
 
-        return new Promise((resolve, reject) => {
+        for(let folder of folders) {
+            let folderVM = new FolderVM(folder.id, folder.name, []);
 
-            for(let folder of folders) {
-                let folderVM = new FolderVM(folder.id, folder.name, []);
-
-                for(let subId of folder.subIds) {
-                    for(let sub of subs) {
-                        if(sub.snippet.resourceId.channelId === subId) folderVM.add(sub);
-                    }
+            for(let subId of folder.subIds) {
+                for(let sub of subs) {
+                    if(sub.snippet.resourceId.channelId === subId) folderVM.add(sub);
                 }
-
-                folderVMs.push(folderVM);
             }
 
-            resolve(folderVMs);
-        });
+            folderVMs.push(folderVM);
+        }
+
+        return folderVMs;
     }
 
     /**
@@ -41,68 +38,60 @@ class FoldersHelper {
      * @param subs
      * @param configData
      * @param id
-     * @returns {Promise}
+     * @returns {FolderVM}
      */
     static buildFolderVM(subs, configData, id) {
         let folders = configData.folders;
         let folderVM = null;
 
-        return new Promise((resolve, reject) => {
-
-            for(let folder of folders) {
-                if(folder.id == id) {
-                    folderVM = new FolderVM(folder.id, folder.name, []);
-                    for(let subId of folder.subIds) {
-                        for(let sub of subs) {
-                            if(sub.snippet.resourceId.channelId === subId) folderVM.add(sub);
-                        }
+        for(let folder of folders) {
+            if(folder.id == id) {
+                folderVM = new FolderVM(folder.id, folder.name, []);
+                for(let subId of folder.subIds) {
+                    for(let sub of subs) {
+                        if(sub.snippet.resourceId.channelId === subId) folderVM.add(sub);
                     }
-                    break;
                 }
+                break;
             }
+        }
 
-            resolve(folderVM);
-        });
+        return folderVM;
     }
 
     /**
      * Gets a folder from config data given its id
      * @param configData
      * @param id
-     * @returns {Promise}
+     * @returns {Folder}
      */
     static getFolderById(configData, id) {
-        return new Promise((resolve, reject) => {
+        let f = null;
 
-            let f = null;
-
-            if(configData.folders) {
-                for(let folder of configData.folders) {
-                    if(folder.id == id) {
-                        f = folder;
-                    }
+        if(configData.folders) {
+            for(let folder of configData.folders) {
+                if(folder.id == id) {
+                    f = folder;
                 }
             }
+        }
 
-            resolve(f);
-        });
+        return f;
     }
 
     /**
      * Extracts a list of subIds from a list of YouTube sub json objects
      * @param subs
-     * @returns {Promise}
+     * @returns {String[]}
      */
     static getSubIds(subs) {
-        return new Promise((resolve, reject) => {
-            let subIds = [];
+        let subIds = [];
 
-            for(let sub of subs) {
-                subIds.push(sub.snippet.resourceId.channelId);
-            }
+        for(let sub of subs) {
+            subIds.push(sub.snippet.resourceId.channelId);
+        }
 
-            resolve(subIds);
-        })
+        return subIds;
     }
 }
 

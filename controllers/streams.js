@@ -22,20 +22,10 @@ class StreamsController {
      * Gets all streams for a user
      * @param user
      * @param subs
-     * @returns {Promise}
+     * @returns {FolderVM[]}
      */
     static getAllStreams(user, subs) {
-        logger.debug(`Attempting to get all user's streams...`);
-
-        return new Promise((resolve, reject) => {
-            FoldersHelper.buildFolderVMs(subs, ConfigData.fromJson(user.config.data)).then(folderVMs => {
-                logger.debug(`Successfully got all user's streams`);
-                resolve(folderVMs);
-            }).catch((err) => {
-                logger.error(`Failed to get all user's streams - ${err.message}`);
-                reject(err);
-            });
-        });
+        return FoldersHelper.buildFolderVMs(subs, ConfigData.fromJson(user.config.data));
     }
 
     /**
@@ -43,20 +33,10 @@ class StreamsController {
      * @param user
      * @param subs
      * @param folderId
-     * @returns {Promise.<T>}
+     * @returns {FolderVM}
      */
     static getStream(user, subs, folderId) {
-        logger.debug(`Attempting to get user's stream...`);
-
-        return new Promise((resolve, reject) => {
-            FoldersHelper.buildFolderVM(subs, ConfigData.fromJson(user.config.data), folderId).then(folderVM => {
-                logger.debug(`Successfully got user's stream`);
-                resolve(folderVM);
-            });
-        }).catch((err) => {
-            logger.error(`Failed to get user's stream - ${err.message}`);
-            reject(err);
-        });
+        return FoldersHelper.buildFolderVM(subs, ConfigData.fromJson(user.config.data), folderId);
     }
 
     /**
@@ -130,11 +110,10 @@ class StreamsController {
 
         let auth = OAuth2Helper.getAuth(user.creds);
         let configData = ConfigData.fromJson(user.config.data);
+        let subIds = FoldersHelper.getSubIds(subs);
 
         return new Promise((resolve, reject) => {
-            FoldersHelper.getSubIds(subs).then(subIds => {
-                return configData.setSubIdsForId(folderId, subIds);
-            }).then(() => {
+            configData.setSubIdsForId(folderId, subIds).then(() => {
                 return Config.saveConfig(user.config.id, configData, auth);
             }).then(() => {
                 return Config.getConfig(auth);
@@ -182,16 +161,15 @@ class StreamsController {
 
         return new Promise((resolve, reject) => {
             let auth = OAuth2Helper.getAuth(user.creds);
+            let folder = FoldersHelper.getFolderById(user.config.data, folderId);
 
-            FoldersHelper.getFolderById(user.config.data, folderId).then(folder => {
-                let videoCalls = [];
+            let videoCalls = [];
 
-                for(let subId of folder.subIds) {
-                    videoCalls.push(YouTube.getVideos(auth, subId));
-                }
+            for(let subId of folder.subIds) {
+                videoCalls.push(YouTube.getVideos(auth, subId));
+            }
 
-                return Promise.all(videoCalls);
-            }).then(results => {
+            Promise.all(videoCalls).then(results => {
                 logger.debug(`Successfully got videos for stream`);
 
                 let videos = [];
@@ -208,7 +186,7 @@ class StreamsController {
             }).catch(err => {
                 logger.error(`Failed to get videos for stream - ${err.message}`);
                 reject(err);
-            })
+            });
         });
     }
 }
