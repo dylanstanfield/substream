@@ -29,13 +29,12 @@
                 right: 0;
             }
 
-            .channels-label {
-                text-transform: uppercase;
-                color: #999999;
-                font-size: 12px;
-                line-height: 24px;
-                display: block;
-                margin: 12px 0;
+            .delete {
+                color: #c64844;
+            }
+
+            .delete:hover {
+                color: #f3504c;
             }
 
             #loading {
@@ -61,13 +60,6 @@
                 transition: all 500ms ease;
                 opacity: 1;
                 top: 0;
-            }
-
-            label {
-                font-size: 12px;
-                text-transform: uppercase;
-                display: block;
-                margin: 12px 0;
             }
 
             .video-wrap {
@@ -135,7 +127,7 @@
 
         <header>
             <h1>{{streamName}}</h1>
-            <a on-tap="_deleteStream" class="button">Delete Stream</a>
+            <a on-tap="_deleteStream" class="delete button">Delete Stream</a>
         </header>
 
 
