@@ -20,28 +20,22 @@ class ConfigData {
     /**
      * Deletes a folder in this config data, given its id
      * @param folderId
-     * @returns {Promise}
      */
-    deleteFolderById(folderId) {
-        let self = this;
+    removeFolder(folderId) {
 
-        return new Promise((resolve, reject) => {
+        var didDelete = false;
 
-            var didDelete = false;
-
-            if(self.folders) {
-                for(let i in self.folders) {
-                    if(folderId == self.folders[i].id) {
-                        self.folders.splice(i, 1);
-                        didDelete = true;
-                        break;
-                    }
+        if(this.folders) {
+            for(let i in this.folders) {
+                if(folderId == this.folders[i].id) {
+                    this.folders.splice(i, 1);
+                    didDelete = true;
+                    break;
                 }
             }
+        }
 
-            if(didDelete) resolve(true);
-            else reject(new Error(`Unable to delete folder with id ${folderId}`));
-        });
+        if(!didDelete) throw new Error(`Unable to delete folder with id ${folderId}`);
     }
 
     /**

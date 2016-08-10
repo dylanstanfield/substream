@@ -74,16 +74,12 @@ class StreamsController {
             folder.name = name;
             folder.subIds = subIds;
 
+            let auth = OAuth2Helper.getAuth(user.creds);
             let configData = ConfigData.fromJson(user.config.data);
             configData.addFolder(folder);
 
-            let $auth = null;
-
-            OAuth2Helper.getAuth(user.creds).then(auth => {
-                $auth = auth;
-                return Config.saveConfig(user.config.id, configData, auth);
-            }).then(() => {
-                return Config.getConfig($auth);
+            Config.saveConfig(user.config.id, configData, auth).then(() => {
+                return Config.getConfig(auth);
             }).then((config) => {
                 user.config = config;
                 logger.debug(`Successfully created stream`);
@@ -104,17 +100,13 @@ class StreamsController {
     static deleteStream(user, folderId) {
         logger.debug(`Attempting to delete stream...`);
 
+        let auth = OAuth2Helper.getAuth(user.creds);
         let configData = ConfigData.fromJson(user.config.data);
-        let $auth = null;
+        configData.removeFolder(folderId);
 
         return new Promise((resolve, reject) => {
-            OAuth2Helper.getAuth(user.creds).then(auth => {
-                $auth = auth;
-                return configData.deleteFolderById(folderId);
-            }).then(() => {
-                return Config.saveConfig(user.config.id, configData, $auth);
-            }).then(() => {
-                return Config.getConfig($auth);
+            Config.saveConfig(user.config.id, configData, auth).then(() => {
+                return Config.getConfig(auth);
             }).then((config) => {
                 user.config = config;
                 logger.debug(`Successfully deleted stream`);
@@ -136,19 +128,16 @@ class StreamsController {
     static updateStream(user, folderId, subs) {
         logger.debug(`Attempting to update stream...`);
 
+        let auth = OAuth2Helper.getAuth(user.creds);
         let configData = ConfigData.fromJson(user.config.data);
-        let $auth = null;
 
         return new Promise((resolve, reject) => {
-            OAuth2Helper.getAuth(user.creds).then(auth => {
-                $auth = auth;
-                return FoldersHelper.getSubIds(subs);
-            }).then(subIds => {
+            FoldersHelper.getSubIds(subs).then(subIds => {
                 return configData.setSubIdsForId(folderId, subIds);
             }).then(() => {
-                return Config.saveConfig(user.config.id, configData, $auth);
+                return Config.saveConfig(user.config.id, configData, auth);
             }).then(() => {
-                return Config.getConfig($auth);
+                return Config.getConfig(auth);
             }).then((config) => {
                 user.config = config;
                 logger.debug(`Successfully updated stream`);
@@ -169,9 +158,10 @@ class StreamsController {
         logger.debug(`Attempting to get all subs...`);
 
         return new Promise((resolve, reject) => {
-            OAuth2Helper.getAuth(user.creds).then(auth => {
-                return YouTube.getSubscriptions(auth);
-            }).then(subs => {
+
+            let auth = OAuth2Helper.getAuth(user.creds);
+
+            YouTube.getSubscriptions(auth).then(subs => {
                 logger.debug(`Successfully got all subs`);
                 resolve(subs);
             }).catch(err => {
@@ -191,16 +181,13 @@ class StreamsController {
         logger.debug(`Attempting to get videos for stream...`);
 
         return new Promise((resolve, reject) => {
-            let $auth = null;
+            let auth = OAuth2Helper.getAuth(user.creds);
 
-            OAuth2Helper.getAuth(user.creds).then(auth => {
-                $auth = auth;
-                return FoldersHelper.getFolderById(user.config.data, folderId);
-            }).then(folder => {
+            FoldersHelper.getFolderById(user.config.data, folderId).then(folder => {
                 let videoCalls = [];
 
                 for(let subId of folder.subIds) {
-                    videoCalls.push(YouTube.getVideos($auth, subId));
+                    videoCalls.push(YouTube.getVideos(auth, subId));
                 }
 
                 return Promise.all(videoCalls);

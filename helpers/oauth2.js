@@ -13,19 +13,17 @@ class OAuth2Helper {
     /**
      * Makes an oauth2 client object for a user's credentials
      * @param creds
-     * @returns {Promise}
+     * @returns {google.auth.OAuth2}
      */
     static getAuth(creds) {
-        return new Promise((resolve, reject) => {
-            let client = new OAuth2(
-                googleConfig.clientId,
-                googleConfig.clientSecret,
-                googleConfig.redirectUrl);
+        let client = new OAuth2(
+            googleConfig.clientId,
+            googleConfig.clientSecret,
+            googleConfig.redirectUrl);
 
-            client.setCredentials(creds);
+        client.setCredentials(creds);
 
-            resolve(client);
-        });
+        return client;
     }
 }
 

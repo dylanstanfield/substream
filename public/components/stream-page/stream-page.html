@@ -204,8 +204,12 @@
                     this.$.videosWrap.classList.remove("show");
                     this.$.loading.style.display = "block";
                 } else {
-                    this.$.videosWrap.classList.add("show");
-                    this.$.loading.style.display = "none";
+                    var self = this;
+                    setTimeout(function() {
+                        self.$.videosWrap.classList.add("show");
+                        self.$.loading.style.display = "none";
+                    }, 500);
+
                 }
             },
 

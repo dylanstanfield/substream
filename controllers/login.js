@@ -47,8 +47,9 @@ class LoginController {
 
             let user = {};
 
-            OAuth2Service.setTokensForCode(accessCode, auth).then(() => {
-                user.creds = auth.credentials;
+            OAuth2Service.getTokenForCode(accessCode, auth).then(token => {
+                user.creds = token;
+                auth.setCredentials(token);
                 return Promise.all([YouTube.getUserInfo(auth), Config.getConfig(auth)]);
             }).then(results => {
                 user.info = results[0];

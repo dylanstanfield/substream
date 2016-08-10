@@ -12,7 +12,7 @@ class OAuth2Service {
      * @param oauth2Client
      * @returns {Promise} which resolves to true for success
      */
-    static setTokensForCode(code, oauth2Client) {
+    static getTokenForCode(code, oauth2Client) {
         logger.debug(`Setting tokens for code...`);
 
         return new Promise((resolve, reject) => {
@@ -23,8 +23,7 @@ class OAuth2Service {
                     reject(err);
                 } else {
                     logger.debug(`Successfully set tokens for code`);
-                    oauth2Client.setCredentials(tokens);
-                    resolve(true);
+                    resolve(tokens);
                 }
             });
         });
