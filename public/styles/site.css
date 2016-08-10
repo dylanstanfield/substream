@@ -58,3 +58,40 @@ input {
     font-size: 14px;
     color: #ffffff;
 }
+
+.welcome {
+    text-align: center;
+    padding: 96px;
+}
+
+.welcome h1 {
+    font-size: 72px;
+}
+
+.welcome hr {
+    width: 60%;
+}
+
+.welcome p {
+    margin-top: 24px;
+    font-size: 24px;
+    text-transform: uppercase;
+    color: #999999;
+}
+
+.welcome a {
+    margin-top: 72px;
+    text-decoration: none;
+    color: #ffffff;
+    background: rgba(255, 255, 255, .1);
+    line-height: 40px;
+    padding: 0 16px;
+    display: inline-block;
+    font-size: 14px;
+    border-radius: 2px;
+    transition: all 200ms ease;
+}
+
+.welcome a:hover {
+    background: rgba(255, 255, 255, .2);
+}
