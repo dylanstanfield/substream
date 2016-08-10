@@ -22,7 +22,7 @@ class OAuth2Helper {
                 googleConfig.clientSecret,
                 googleConfig.redirectUrl);
 
-            client.credentials = creds;
+            client.setCredentials(creds);
 
             resolve(client);
         });

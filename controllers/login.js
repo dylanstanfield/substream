@@ -11,7 +11,6 @@ var OAuth2Service = require('./../services/oauth2');
 var YouTube = require('./../services/youtube');
 var Config = require('./../services/config');
 
-// logger
 var logger = comb.logger('ss.controllers.login');
 
 class LoginController {
@@ -27,7 +26,7 @@ class LoginController {
             googleConfig.redirectUrl);
 
         return client.generateAuthUrl({
-            // access_type: 'offline', // 'online' (default) or 'offline' (gets refresh_token)
+            access_type: 'offline', // 'online' (default) or 'offline' (gets refresh_token)
             scope: googleConfig.scopes
         });
     }
