@@ -110,12 +110,10 @@ class StreamsController {
 
         let auth = OAuth2Helper.getAuth(user.creds);
         let configData = ConfigData.fromJson(user.config.data);
-        let subIds = FoldersHelper.getSubIds(subs);
+        configData.setSubIdsForId(folderId, FoldersHelper.getSubIds(subs));
 
         return new Promise((resolve, reject) => {
-            configData.setSubIdsForId(folderId, subIds).then(() => {
-                return Config.saveConfig(user.config.id, configData, auth);
-            }).then(() => {
+            Config.saveConfig(user.config.id, configData, auth).then(() => {
                 return Config.getConfig(auth);
             }).then((config) => {
                 user.config = config;

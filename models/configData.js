@@ -42,28 +42,22 @@ class ConfigData {
      * Sets the subIds of a folder in this config data, given the folder id
      * @param folderId
      * @param subIds
-     * @returns {Promise}
      */
     setSubIdsForId(folderId, subIds) {
-        let self = this;
 
-        return new Promise((resolve, reject) => {
+        let didUpdate = false;
 
-            var didUpdate = false;
-
-            if(self.folders) {
-                for(let i in self.folders) {
-                    if(folderId == self.folders[i].id) {
-                        self.folders[i].subIds = subIds;
-                        didUpdate = true;
-                        break;
-                    }
+        if(this.folders) {
+            for(let i in this.folders) {
+                if(folderId == this.folders[i].id) {
+                    this.folders[i].subIds = subIds;
+                    didUpdate = true;
+                    break;
                 }
             }
+        }
 
-            if(didUpdate) resolve(true);
-            else reject(new Error(`Unable to set subIds folder with id ${folderId}`));
-        });
+        if(!didUpdate) throw new Error('Unable to set subIds for folderId');
     }
 
     /**
