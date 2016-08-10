@@ -52,6 +52,15 @@
             .videos-wrap {
                 font-size: 0;
                 padding: 12px auto 96px;
+                position: relative;
+                top: 48px;
+                opacity: 0;
+            }
+
+            .videos-wrap.show {
+                transition: all 500ms ease;
+                opacity: 1;
+                top: 0;
             }
 
             label {
@@ -180,6 +189,8 @@
             },
 
             setStreamInfo(streamId) {
+                this.$.videosWrap.classList.remove("show");
+
                 for(var stream of this.allStreams) {
                     if(stream.folderId == streamId) {
                         this.streamName = stream.name;
@@ -190,10 +201,10 @@
 
             checkLoading(isLoading) {
                 if(isLoading) {
-                    this.$.videosWrap.style.display = "none";
+                    this.$.videosWrap.classList.remove("show");
                     this.$.loading.style.display = "block";
                 } else {
-                    this.$.videosWrap.style.display = "block";
+                    this.$.videosWrap.classList.add("show");
                     this.$.loading.style.display = "none";
                 }
             },

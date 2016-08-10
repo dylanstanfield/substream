@@ -112,6 +112,7 @@
 
             redirectToStream() {
                 window.location.href = '#/s/' + event.model.item.folderId;
+                window.scrollTo(0,0);
             },
 
             _activeStreamChanged(activeStreamId, activeAdd) {
