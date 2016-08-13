@@ -21,14 +21,9 @@ class YouTubeService {
     static getSubscriptions(auth) {
         logger.debug(`Getting subscriptions...`);
 
-        return new Promise((resolve, reject) => {
-            getSubscriptions(auth).then(subs => { // private method for handling pagination from YouTube
-                logger.debug(`Successfully got subscriptions`);
-                resolve(subs);
-            }).catch(err => {
-                logger.error(`Failed to get subscriptions in get next page - ${err.message}`);
-                reject(err);
-            });
+        return getSubscriptions(auth).then(subs => { // private method for handling pagination from YouTube
+            logger.debug(`Successfully got subscriptions`);
+            return subs;
         });
     }
 

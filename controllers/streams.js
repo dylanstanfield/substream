@@ -134,17 +134,13 @@ class StreamsController {
     static getAllSubs(user) {
         logger.debug(`Attempting to get all subs...`);
 
-        return new Promise((resolve, reject) => {
+        let auth = OAuth2Helper.getAuth(user.creds);
 
-            let auth = OAuth2Helper.getAuth(user.creds);
-
-            YouTube.getSubscriptions(auth).then(subs => {
-                logger.debug(`Successfully got all subs`);
-                resolve(subs);
-            }).catch(err => {
-                logger.error(`Failed to get all subs - ${err.message}`);
-                reject(err);
-            })
+        return YouTube.getSubscriptions(auth).then(subs => {
+            logger.debug(`Successfully got all subs`);
+            return subs;
+        }).catch(err => {
+            logger.error(`Failed to get all subs - ${err.message}`);
         });
     }
 
@@ -157,34 +153,29 @@ class StreamsController {
     static getVideos(user, folderId) {
         logger.debug(`Attempting to get videos for stream...`);
 
-        return new Promise((resolve, reject) => {
-            let auth = OAuth2Helper.getAuth(user.creds);
-            let folder = FoldersHelper.getFolderById(user.config.data, folderId);
+        let auth = OAuth2Helper.getAuth(user.creds);
+        let folder = FoldersHelper.getFolderById(user.config.data, folderId);
 
-            let videoCalls = [];
+        let videoCalls = [];
 
-            for(let subId of folder.subIds) {
-                videoCalls.push(YouTube.getVideos(auth, subId));
+        for(let subId of folder.subIds) {
+            videoCalls.push(YouTube.getVideos(auth, subId));
+        }
+
+        return Promise.all(videoCalls).then(results => {
+            logger.debug(`Successfully got videos for stream`);
+
+            let videos = [];
+
+            for(let set of results) {
+                for(let video of set) {
+                    videos.push(video);
+                }
             }
 
-            Promise.all(videoCalls).then(results => {
-                logger.debug(`Successfully got videos for stream`);
+            videos.sort(sortByPublishedTime);
 
-                let videos = [];
-
-                for(let set of results) {
-                    for(let video of set) {
-                        videos.push(video);
-                    }
-                }
-
-                videos.sort(sortByPublishedTime);
-
-                resolve(videos);
-            }).catch(err => {
-                logger.error(`Failed to get videos for stream - ${err.message}`);
-                reject(err);
-            });
+            return videos;
         });
     }
 }
