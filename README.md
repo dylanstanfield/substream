@@ -27,7 +27,7 @@ module.exports = {
     clientSecret: <INSERT YOUR CLIENT SECRET>,
     redirectUrl: 'http://localhost:3000/login/google/callback', // or your custom callback
     scopes: [
-        'https://www.googleapis.com/auth/youtube',
+        'https://www.googleapis.com/auth/youtube.readonly',
         'https://www.googleapis.com/auth/drive.appdata'
     ]
 };

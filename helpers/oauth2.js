@@ -21,7 +21,7 @@ class OAuth2Helper {
             googleConfig.clientSecret,
             googleConfig.redirectUrl);
 
-        client.setCredentials(creds);
+        client.setCredentials(JSON.parse(creds));
 
         return client;
     }
