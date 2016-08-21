@@ -27,7 +27,8 @@ class LoginController {
 
         return client.generateAuthUrl({
             access_type: 'offline', // 'online' (default) or 'offline' (gets refresh_token)
-            scope: googleConfig.scopes
+            scope: googleConfig.scopes,
+            approval_prompt: 'force' // gets refresh token on every login, without it's only on the first
         });
     }
 
