@@ -60,20 +60,18 @@ class YouTubeService {
      * Gets videos for a channel - sorted by most recent
      * @param auth
      * @param channelId
-     * @returns {Promise}
+     * @returns {Promise} resolves to list of videos
      */
     static getVideos(auth, channelId) {
         logger.debug(`Getting videos for ${channelId}...`);
 
-        return new Promise((resolve, reject) => {
-            let publishedAfter = DatesHelper.startOfPastMonth(config.numMonthsToFetchVideos);
+        let publishedAfter = DatesHelper.startOfPastMonth(config.numMonthsToFetchVideos);
 
-            getVideos(auth, channelId, DatesHelper.convertToRCF3339(publishedAfter)).then(videos => {
-                resolve(videos);
-            }).catch(err => {
-                logger.error(`Failed to get videos - ${err.message}`);
-                reject(err);
-            });
+        return getVideos(auth, channelId, DatesHelper.convertToRCF3339(publishedAfter)).then(videos => {
+            return videos;
+        }).catch(err => {
+            logger.error(`Failed to get videos - ${err.message}`);
+            reject(err);
         });
     }
 }
@@ -83,7 +81,7 @@ class YouTubeService {
  * @param auth
  * @param subs
  * @param nextPageToken
- * @returns {*}
+ * @returns {Array}
  */
 function getSubscriptions(auth, subs, nextPageToken) {
     if(nextPageToken || subs == undefined) { // subs is undefined on first time through
@@ -119,7 +117,7 @@ function getSubscriptions(auth, subs, nextPageToken) {
  * @param publishedAfter
  * @param videos
  * @param nextPageToken
- * @returns {*}
+ * @returns {Array}
  */
 function getVideos(auth, channelId, publishedAfter, videos, nextPageToken) {
 

@@ -19,38 +19,32 @@ class ConfigService {
      */
     static getConfig(auth) {
         logger.debug(`Attempting to get config file data...`);
-        return new Promise((resolve, reject) => {
-            let configFileId = null;
+        let configFileId = null;
 
-            Drive.getAppDataFiles(auth).then((files) => {
-                logger.debug(`Searching through appdata metadata for config file...`);
-                for(let file of files) {
-                    if(file.name == "config.json") {
-                        logger.debug(`Found config file metadata`);
-                        configFileId = file.id;
-                    }
+        return Drive.getAppDataFiles(auth).then((files) => {
+            logger.debug(`Searching through appdata metadata for config file...`);
+            for(let file of files) {
+                if(file.name == "config.json") {
+                    logger.debug(`Found config file metadata`);
+                    configFileId = file.id;
                 }
+            }
 
-                if(configFileId) {
+            if(configFileId) {
+                return Drive.getFile(configFileId, auth);
+            } else {
+                logger.debug(`No config file found...`);
+                return this.createConfig(auth).then(newFileId => {
+                    configFileId = newFileId;
+                    logger.debug(`Getting newly created file...`);
                     return Drive.getFile(configFileId, auth);
-                } else {
-                    logger.debug(`No config file found...`);
-                    return this.createConfig(auth).then(newFileId => {
-                        configFileId = newFileId;
-                        logger.debug(`Getting newly created file...`);
-                        return Drive.getFile(configFileId, auth);
-                    });
-                }
-            }).then((data) => {
-                logger.debug(`Successfully got config file data`);
-                resolve({
-                    id: configFileId,
-                    data: data
                 });
-            }).catch((err) => {
-                logger.error(`Failed to get config file - ${err.message}`);
-                reject(err);
-            });
+            }
+        }).then((data) => {
+            logger.debug(`Successfully got config file data`);
+            return { id: configFileId, data: data };
+        }).catch((err) => {
+            logger.error(`Failed to get config file - ${err.message}`);
         });
     }
 
@@ -87,14 +81,12 @@ class ConfigService {
      */
     static saveConfig(configId, configData, auth) {
         logger.debug(`Attempting to save config file...`);
-        return new Promise((resolve, reject) => {
-            Drive.updateFile(configId, configData, auth).then(fileId => {
-                logger.debug(`Successfully saved config file ${fileId}`);
-                resolve(fileId);
-            }).catch(err => {
-                logger.error(`Failed to save config file - ${err.message}`);
-                reject(err);
-            });
+
+        return Drive.updateFile(configId, configData, auth).then(fileId => {
+            logger.debug(`Successfully saved config file ${fileId}`);
+            return fileId;
+        }).catch(err => {
+            logger.error(`Failed to save config file - ${err.message}`);
         });
     }
 

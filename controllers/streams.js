@@ -49,25 +49,22 @@ class StreamsController {
     static createStream(user, name, subIds) {
         logger.debug(`Attempting to create stream...`);
 
-        return new Promise((resolve, reject) => {
-            let folder = new Folder();
-            folder.name = name;
-            folder.subIds = subIds;
+        let folder = new Folder();
+        folder.name = name;
+        folder.subIds = subIds;
 
-            let auth = OAuth2Helper.getAuth(user.creds);
-            let configData = ConfigData.fromJson(user.config.data);
-            configData.addFolder(folder);
+        let auth = OAuth2Helper.getAuth(user.creds);
+        let configData = ConfigData.fromJson(user.config.data);
+        configData.addFolder(folder);
 
-            Config.saveConfig(user.config.id, configData, auth).then(() => {
-                return Config.getConfig(auth);
-            }).then((config) => {
-                user.config = config;
-                logger.debug(`Successfully created stream`);
-                resolve(folder.id);
-            }).catch(err => {
-                logger.error(`Failed to create stream - ${err.message}`);
-                reject(err);
-            });
+        return Config.saveConfig(user.config.id, configData, auth).then(() => {
+            return Config.getConfig(auth);
+        }).then((config) => {
+            user.config = config;
+            logger.debug(`Successfully created stream`);
+            return folder.id;
+        }).catch(err => {
+            logger.error(`Failed to create stream - ${err.message}`);
         });
     }
 
@@ -84,18 +81,14 @@ class StreamsController {
         let configData = ConfigData.fromJson(user.config.data);
         configData.removeFolder(folderId);
 
-        return new Promise((resolve, reject) => {
-            Config.saveConfig(user.config.id, configData, auth).then(() => {
-                return Config.getConfig(auth);
-            }).then((config) => {
-                user.config = config;
-                logger.debug(`Successfully deleted stream`);
-                resolve();
-            }).catch(err => {
-                logger.error(`Failed to delete stream - ${err.message}`);
-                reject(err);
-            });
-        })
+        return Config.saveConfig(user.config.id, configData, auth).then(() => {
+            return Config.getConfig(auth);
+        }).then((config) => {
+            user.config = config;
+            logger.debug(`Successfully deleted stream`);
+        }).catch(err => {
+            logger.error(`Failed to delete stream - ${err.message}`);
+        });
     }
 
     /**
@@ -112,17 +105,13 @@ class StreamsController {
         let configData = ConfigData.fromJson(user.config.data);
         configData.setSubIdsForId(folderId, FoldersHelper.getSubIds(subs));
 
-        return new Promise((resolve, reject) => {
-            Config.saveConfig(user.config.id, configData, auth).then(() => {
-                return Config.getConfig(auth);
-            }).then((config) => {
-                user.config = config;
-                logger.debug(`Successfully updated stream`);
-                resolve();
-            }).catch(err => {
-                logger.error(`Failed to update stream - ${err.message}`);
-                reject(err);
-            });
+        return Config.saveConfig(user.config.id, configData, auth).then(() => {
+            return Config.getConfig(auth);
+        }).then((config) => {
+            user.config = config;
+            logger.debug(`Successfully updated stream`);
+        }).catch(err => {
+            logger.error(`Failed to update stream - ${err.message}`);
         });
     }
 
@@ -176,6 +165,8 @@ class StreamsController {
             videos.sort(sortByPublishedTime);
 
             return videos;
+        }).catch(err => {
+            logger.error()
         });
     }
 }
