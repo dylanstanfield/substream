@@ -62,15 +62,24 @@
                 text-align: left;
                 padding: 8px 12px;
                 background: rgba(255, 255, 255, .1);
+                border-bottom: 3px solid rgba(255, 255, 255, 0.05);
                 overflow: hidden;
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 border-radius: 2px;
                 cursor: pointer;
+                position: relative;
+                top: 0;
+                transition: all 100ms ease;
             }
 
             .select-channels-wrap .channel:hover {
+                top: -2px;
                 background: rgba(255, 255, 255, .2);
+            }
+
+            .select-channels-wrap .channel:active {
+                top: -1px;
             }
 
             .select-channels-wrap .channel span {

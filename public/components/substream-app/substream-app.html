@@ -31,6 +31,17 @@
 
             }
 
+            header h1 .version-tag {
+                font-size: 12px;
+                background: rgba(255, 255, 255, 0.4);
+                color: #272727;
+                padding: 3px 6px;
+                border-radius: 2px;
+                margin-left: 3px;
+                position: relative;
+                top: -4px;
+            }
+
             header .username {
                 float: right;
                 font-size: 12px;
@@ -43,7 +54,7 @@
         </style>
 
         <header>
-            <h1>substream</h1>
+            <h1>substream <span class="version-tag">Alpha</span></h1>
             <span class="username">{{user.title}}</span>
         </header>
 

@@ -1,17 +1,17 @@
 // libraries
-var google = require('googleapis');
-var OAuth2 = google.auth.OAuth2;
-var comb = require('comb');
+let google = require('googleapis');
+let OAuth2 = google.auth.OAuth2;
+let comb = require('comb');
 
 // config
-var googleConfig = require('./../config/google');
+let googleConfig = require('./../config/google');
 
 // services
-var OAuth2Service = require('./../services/oauth2');
-var YouTube = require('./../services/youtube');
-var Config = require('./../services/config');
+let OAuth2Service = require('./../services/oauth2');
+let YouTube = require('./../services/youtube');
+let Config = require('./../services/config');
 
-var logger = comb.logger('ss.controllers.login');
+let logger = comb.logger('ss.controllers.login');
 
 class LoginController {
 
