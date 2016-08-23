@@ -2,7 +2,7 @@
 <link rel="import" href="/bower_components/app-route/app-location.html">
 <link rel="import" href="/bower_components/app-route/app-route.html">
 
-<link rel="import" href="/components/index-page/index-page.html">
+<link rel="import" href="/components/stream-list/stream-list.html">
 <link rel="import" href="/components/create-page/create-page.html">
 <link rel="import" href="/components/stream-page/stream-page.html">
 
@@ -35,7 +35,7 @@
                 font-size: 12px;
                 background: rgba(255, 255, 255, 0.4);
                 color: #272727;
-                padding: 3px 6px;
+                padding: 3px 8px;
                 border-radius: 2px;
                 margin-left: 3px;
                 position: relative;
@@ -71,10 +71,10 @@
                    active="{{createActive}}"></app-route>
 
         <main>
-            <index-page route="{{route}}"
+            <stream-list route="{{route}}"
                         active-stream-id="{{streamData.id}}"
                         active-add="{{createActive}}"
-                        streams="{{streams}}"></index-page>
+                        streams="{{streams}}"></stream-list>
 
             <create-page route="{{route}}"
                          subs="[[subs]]"
